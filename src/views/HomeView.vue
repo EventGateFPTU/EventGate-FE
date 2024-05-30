@@ -1,12 +1,18 @@
 <script setup lang="ts">
-import { ref } from 'vue'
-import Button from 'primevue/button'
-
-const count = ref(0)
+import NavigationBar from '@/components/NavigationBar.vue'
+//@ts-expect-error
+import CIA from '@/components/CIA.vue'
 </script>
 
 <template>
-  <div class="flex h-screen items-center justify-center">
-    <Button @click="count++"> Count is: {{ count }} </Button>
+  <div class="flex h-screen flex-col items-start justify-start">
+    <NavigationBar
+      @search="
+        (e: Event) =>
+          //@ts-expect-error
+          console.log(e.target.elements[0].form[0].value)
+      "
+    />
+    <CIA />
   </div>
 </template>
