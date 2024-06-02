@@ -1,18 +1,17 @@
 <template>
-  <div class="card flex h-96 w-screen flex-row justify-center">
+  <div class="card my-6 flex w-screen flex-row justify-center">
     <Galleria
-      class="w-full"
       :value="images"
       :responsiveOptions="responsiveOptions"
       :numVisible="5"
       :circular="true"
-      containerStyle="max-width: 640px"
       :showItemNavigators="true"
       :showThumbnails="false"
-      :class="['w-full', 'h-full']"
     >
       <template #item="slotProps">
-        <img class="shadow-2xl" :src="slotProps.item.itemImageSrc" :alt="slotProps.item.alt" />
+        <div class="w-full">
+          <img class="" :src="slotProps.item.itemImageSrc" :alt="slotProps.item.alt" />
+        </div>
       </template>
     </Galleria>
   </div>

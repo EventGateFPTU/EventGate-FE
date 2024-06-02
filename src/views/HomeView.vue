@@ -1,11 +1,17 @@
 <script setup lang="ts">
 import NavigationBar from '@/components/NavigationBar.vue'
-//@ts-expect-error
+//@ts-ignore
 import CIA from '@/components/CIA.vue'
+import UpcomingEvent from '@/components/UpcomingEvent.vue'
+import MusicEvent from '@/components/MusicEvent.vue'
+// @ts-ignore
+import AcademicEvent from '@/components/AcademicEvent.vue'
+// @ts-ignore
+import Footer from '@/components/Footer.vue'
 </script>
 
 <template>
-  <div class="flex h-screen flex-col items-start justify-start">
+  <div class="flex flex-col items-start justify-start">
     <NavigationBar
       @search="
         (e: Event) =>
@@ -14,5 +20,9 @@ import CIA from '@/components/CIA.vue'
       "
     />
     <CIA />
+    <UpcomingEvent />
+    <MusicEvent />
+    <AcademicEvent />
+    <Footer />
   </div>
 </template>

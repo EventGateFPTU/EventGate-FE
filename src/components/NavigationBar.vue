@@ -6,57 +6,30 @@ import 'primeicons/primeicons.css'
 const items = ref([
   {
     label: 'Home',
-    icon: 'pi pi-home',
-    items: [
-      {
-        label: 'Home',
-        icon: 'pi pi-home'
-      },
-      {
-        label: 'About',
-        icon: 'pi pi-home'
-      }
-    ]
-  },
-  {
-    label: 'Feature',
     icon: 'pi pi-home'
   },
   {
-    label: 'About',
-    icon: 'pi pi-home'
+    label: 'Events',
+    icon: 'pi pi-calendar'
   }
 ])
 
 const emit = defineEmits(['search'])
-function search(e:Event) {
+function search(e: Event) {
   e.preventDefault()
   // console.log(e.target);
-  emit('search',e)
+  emit('search', e)
 }
 </script>
 
 <template>
-  <Menubar class="flex w-screen flex-row justify-around shadow-sm" :model="items">
+  <Menubar class="flex h-48 w-screen flex-row justify-around shadow-sm" :model="items">
     <!-- start -->
     <template #start>
-      <span class="align-items-center inline-flex gap-1 px-2 py-2">
-        <img
-          width="35"
-          height="40"
-          viewBox="0 0 35 40"
-          fill="none"
-          src="@/assets/logo.svg"
-          class="h-2rem"
-        >
-          <path d="..." fill="var(--primary-color)" />
-          <path d="..." fill="var(--text-color)" />
-        </img>
-        <span class="text-xl font-semibold">EventGate</span>
-      </span>
+      <img fill="none" src="@/assets/logo.png" class="m-auto w-48" />
     </template>
     <!-- middle -->
-    <template #itemicon="{item}">
+    <template #itemicon="{ item }">
       <span class="text-primary font-bold">{{ item.label }}</span>
     </template>
     <template #item="{ item, props }">
@@ -69,31 +42,33 @@ function search(e:Event) {
           class="border-1 surface-border border-round surface-100 ml-auto p-1 text-xs"
           >{{ item.shortcut }}</span
         >
-      </a>  
+      </a>
     </template>
     <!-- end -->
     <template #end>
-      <div class="flex flex-row justify-around">
-        <div class="card flex items-center justify-around">
-          <form class="flex flex-row" v-on:submit="(e) => search(e)">
+      <div class="mr-6 flex flex-row justify-around">
+        <div class="card flex h-10 flex-row items-center justify-around">
+          <form
+            class="flex h-full flex-row items-center justify-end"
+            v-on:submit="(e) => search(e)"
+          >
             <!-- <InputText type="text" /> -->
-            <input type="text" placeholder="Enter">
-            <Button type="submit">
+            <input class="relative h-full" type="text" placeholder="Enter" />
+            <Button class="absolute" type="submit">
               <i class="pi pi-search"></i>
             </Button>
           </form>
-          
-    </div>
-    <button
-        v-ripple
-        class="p-link align-items-center text-color hover:surface-200 border-noround relative flex w-full overflow-hidden p-2 pl-3">
-        <Avatar image="/images/avatar/amyelsner.png" class="mr-2" shape="circle" />
-        <span class="flex-column inline-flex">
-          <span class="font-bold">PersieDaGamer</span>
-        </span>
-      </button>
+        </div>
+        <button
+          v-ripple
+          class="p-link text-color hover:surface-200 ml-4 flex w-full flex-row items-center justify-end overflow-hidden"
+        >
+          <Avatar image="/images/avatar/amyelsner.png" class="mr-2" shape="circle" />
+          <span class="m-auto inline-flex">
+            <span class="font-bold">PersieDaGamer</span>
+          </span>
+        </button>
       </div>
-      
     </template></Menubar
   >
 </template>
