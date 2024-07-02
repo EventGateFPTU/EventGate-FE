@@ -13,11 +13,16 @@
     "format": "prettier --write src/"
   },
   "dependencies": {
+    "@auth0/auth0-vue": "^2.3.3",
     "@vue-hero-icons/outline": "^1.7.2",
+    "@vueuse/core": "^10.11.0",
     "axios": "^1.7.2",
+    "clsx": "^2.1.1",
     "pinia": "^2.1.7",
     "primeicons": "^7.0.0",
     "primevue": "^3.52.0",
+    "swiper": "^11.1.4",
+    "tailwind-merge": "^2.3.0",
     "vue": "^3.4.21",
     "vue-router": "^4.3.0"
   },
@@ -38,6 +43,7 @@
     "prettier-plugin-tailwindcss": "^0.5.14",
     "tailwindcss": "^3.4.3",
     "typescript": "~5.4.0",
+    "unplugin-vue-router": "^0.10.0",
     "vite": "^5.2.8",
     "vite-plugin-vue-devtools": "^7.0.25",
     "vue-tsc": "^2.0.11"

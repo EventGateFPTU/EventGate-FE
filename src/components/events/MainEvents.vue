@@ -1,45 +1,49 @@
 <template>
-  <div class="card mb-8 flex min-h-72 w-screen flex-col items-center justify-between">
-    <h1 class="mb-6 h-1/6 w-screen text-center text-3xl font-bold">Upcoming Event</h1>
-    <Carousel
-      circular
-      :value="products"
-      :numVisible="5"
-      :numScroll="1"
-      :responsiveOptions="responsiveOptions"
-      :autoplayInterval="3000"
-      :showIndicators="false"
-    >
-      <template #item="slotProps">
-        <div class="h-5/6 w-full rounded-lg">
-          <div class="relative mx-auto flex h-full w-full flex-col items-center justify-end">
-            <img
-              :src="'https://primefaces.org/cdn/primevue/images/product/' + slotProps.data.image"
-              :alt="slotProps.data.name"
-              class="mx-auto flex aspect-3/4 w-2/3 rounded-lg"
-            />
-            <div
-              class="absolute inset-y-0 bottom-0 z-10 flex h-1/4 w-2/3 flex-col items-center justify-center rounded-lg bg-black bg-opacity-45"
-            >
-              <div
-                class="flex w-full flex-col items-center justify-start text-lg font-semibold text-white"
-              >
-                {{ slotProps.data.name }}
-                <div class="mt-0 text-xl font-semibold">${{ slotProps.data.price }}</div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </template>
-    </Carousel>
+  <div
+    class="absolute left-1/2 top-1/2 z-10 flex -translate-x-1/2 -translate-y-1/2 justify-center gap-[calc(100vw_*_0.517)]"
+  >
+    <div class="rounded-3xl bg-white px-3 py-6 hover:cursor-pointer" @click="prev">
+      <i class="pi pi-chevron-left" style="font-size: 1.5rem"></i>
+    </div>
+    <div class="rounded-3xl bg-white px-3 py-6 hover:cursor-pointer" @click="next">
+      <i class="pi pi-chevron-right" style="font-size: 1.5rem"></i>
+    </div>
   </div>
+  <Swiper
+    :slidesPerView="3"
+    :centerSlides="true"
+    :loop="true"
+    :modules
+    slide
+    ref="swiperRef"
+    class="scale-125"
+    spaceBetween="0"
+    :breakpoints="{}"
+    @swiper="setSwiperRef"
+  >
+    <SwiperSlide v-for="product in products" :key="product.id" v-slot="{ isActive, isNext }">
+      <div
+        class="transition-all duration-500"
+        :class="{
+          'scale-75 ': !isNext,
+          'flex justify-end': isActive,
+          'flex justify-center': isNext
+        }"
+      >
+        <img
+          :src="'https://primefaces.org/cdn/primevue/images/product/' + product.image"
+          :alt="product.name"
+          class="border-round w-[1000px] rounded-3xl"
+        />
+      </div>
+    </SwiperSlide>
+  </Swiper>
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
-
-import Carousel from 'primevue/carousel'
-
+import { Swiper, SwiperSlide } from 'swiper/vue'
+import { Autoplay, Navigation } from 'swiper/modules'
+import { onMounted, ref } from 'vue'
 onMounted(() => {
   products.value = [
     {
@@ -153,27 +157,19 @@ onMounted(() => {
   ]
 })
 
+let swiperRef = ref()
+const modules = [Autoplay, Navigation]
 const products: any = ref([])
-const responsiveOptions = ref([
-  {
-    breakpoint: '1400px',
-    numVisible: 2,
-    numScroll: 1
-  },
-  {
-    breakpoint: '1199px',
-    numVisible: 3,
-    numScroll: 1
-  },
-  {
-    breakpoint: '767px',
-    numVisible: 2,
-    numScroll: 1
-  },
-  {
-    breakpoint: '575px',
-    numVisible: 1,
-    numScroll: 1
-  }
-])
+
+const setSwiperRef = (swiper: any) => {
+  swiperRef.value = swiper
+}
+
+const prev = () => {
+  swiperRef.value.slidePrev()
+}
+
+const next = () => {
+  swiperRef.value.slideNext()
+}
 </script>
