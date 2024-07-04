@@ -1,8 +1,6 @@
 <template>
   <DefaultLayout>
-    <div class="min-h-[calc(100vh_-_8rem)] bg-[#4A3F9F]">
-      <CreateEventForm />
-    </div>
+    <CreateEventForm />
   </DefaultLayout>
 </template>
 
