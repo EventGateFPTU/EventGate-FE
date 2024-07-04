@@ -2,22 +2,22 @@
   <div :class="cn('', $props.class)">
     <div :class="cn('relative flex w-full justify-center py-8', contentClass)">
       <div v-for="{ key } in steps" :key class="h-full">
-        <slot :name="key" v-if="key == currentStep.key" />
+        <slot :name="key" v-if="key == currentStep.key" :nextStep />
       </div>
     </div>
-    <div class="absolute bottom-20 flex w-full justify-center">
-      <StepperNavigator @update:step="(step) => (currentStep = step)" />
+    <div class="fixed bottom-12 left-1/2 flex -translate-x-1/2 justify-center">
+      <StepperNavigator @update:step="(step) => updateStep(step)" />
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { provide, ref, type HTMLAttributes } from 'vue'
-import type { Step } from './types'
-import { toRefs } from '@vueuse/core'
-import { currentStepKey, stepsKey } from './symbols'
-import StepperNavigator from './StepperNavigator.vue'
 import { cn } from '@/lib/utils'
+import { toRefs } from '@vueuse/core'
+import { provide, ref, type HTMLAttributes } from 'vue'
+import StepperNavigator from './StepperNavigator.vue'
+import { currentStepKey, stepsKey } from './symbols'
+import type { Step } from './types'
 
 const props = defineProps<{
   steps: Step[]
@@ -28,6 +28,18 @@ const props = defineProps<{
 const { steps } = toRefs(props)
 
 const currentStep = ref<Step>(steps.value[0])
+
+const updateStep = (step: Step) => {
+  if (!currentStep?.value) return
+  if (step.index > currentStep?.value.index + 1) return
+
+  currentStep.value = step
+}
+
+const nextStep = () => {
+  const nextStep = steps.value.find((x) => x.index == currentStep.value.index + 1)
+  updateStep(nextStep!)
+}
 
 provide(stepsKey, steps)
 provide(currentStepKey, currentStep)

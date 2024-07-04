@@ -1,9 +1,10 @@
 <template>
   <DefaultLayout>
-    <div class="relative h-full bg-[#4A3F9F]">
+    <div class="relative h-full overflow-hidden bg-[#4A3F9F]">
       <div class="relative py-40">
         <MainEvents />
       </div>
+
       <div class="relative z-10 flex justify-center gap-5">
         <img src="@/assets/asterisk1.png" class="w-20" />
         <div
@@ -14,13 +15,12 @@
         <img src="@/assets/asterisk1.png" class="w-20" />
       </div>
 
-      <div class="relative pb-64 pt-32">
+      <div class="relative pb-[2000px] pt-32">
         <OutstandingEvents />
       </div>
 
       <img fill="none" src="@/assets/background-logo.png" class="absolute top-0 z-0 w-full" />
-      <img fill="none" src="@/assets/wave.png" class="absolute bottom-0 z-0 w-full" />
-      <div class="relative z-10">
+      <div class="absolute bottom-0 z-0 w-full">
         <Footer />
       </div>
     </div>
