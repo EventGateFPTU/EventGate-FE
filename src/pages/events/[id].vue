@@ -1,21 +1,21 @@
 <template>
   <DefaultLayout :has-footer="true">
-    <div class="flex w-full justify-center pt-32">
+    <div class="relative flex w-full justify-center pt-32" v-if="event">
       <div class="container space-y-16 pb-[400px]">
         <div>
           <div class="grid grid-cols-3 gap-4">
             <div class="col-span-2">
-              <img src="@/assets/test-background.png" alt="" class="w-full rounded-3xl" />
+              <img :src="event.backgroundImageUrl" alt="" class="w-full rounded-3xl" />
             </div>
             <div class="flex flex-col justify-center">
-              <h2 class="text-3xl">TÊN SỰ KIỆN</h2>
+              <h2 class="text-3xl">{{ event.title }}</h2>
             </div>
           </div>
         </div>
 
         <div class="space-y-8 rounded-2xl bg-white p-8">
           <div class="grid grid-cols-4 gap-16">
-            <div class="space-y-8">
+            <div class="relative space-y-8">
               <h2 class="text-2xl font-bold">BAN TỔ CHỨC</h2>
               <div class="flex flex-col items-center gap-4">
                 <img src="@/assets/test-organizer.png" alt="" class="w-full rounded-3xl" />
@@ -32,37 +32,7 @@
             <div class="col-span-3 space-y-8">
               <h2 class="text-2xl font-bold">THÔNG TIN SỰ KIỆN</h2>
 
-              <p class="text-xl">
-                Lorem ipsum dolor sit amet consectetur, adipisicing elit. Aliquam recusandae debitis
-                praesentium quas minus nihil possimus, provident reiciendis, quo nulla officiis qui
-                odio ab nisi similique sunt sit dolorum labore. Blanditiis animi earum
-                exercitationem necessitatibus? Aliquam enim assumenda adipisci facere! Voluptatibus
-                nisi ex repudiandae impedit eligendi dolores quas odit laborum modi quasi,
-                distinctio, ratione incidunt voluptatem! Tenetur fuga voluptas et! Suscipit,
-                voluptate accusamus officia dolorum exercitationem adipisci ut quidem obcaecati sunt
-                quisquam! Corrupti nulla, aliquam, voluptatibus quas magni, beatae blanditiis iusto
-                enim mollitia cumque saepe dolores neque ea qui voluptatem. Eum recusandae et,
-                numquam natus rerum sed maiores perferendis temporibus obcaecati enim eos quas
-                necessitatibus, odit fugiat dolores qui praesentium optio, asperiores labore
-                inventore! Harum sit modi dolores incidunt aperiam? Qui soluta labore cum delectus
-                incidunt distinctio consequuntur, temporibus odit id laudantium placeat itaque
-                neque! Debitis aspernatur ratione, perspiciatis, eaque vero quidem animi delectus
-                ducimus ab provident quasi quam eveniet? Soluta asperiores dicta odit, ipsa, dolorum
-                ducimus totam vel libero minima sapiente earum rerum neque suscipit aut quisquam
-                odio dignissimos voluptas quasi perferendis autem assumenda ut? Ipsum vero earum
-                illo. Repellat velit, accusamus laboriosam numquam fugit iste deserunt ea cum rem
-                blanditiis magni possimus quaerat, odio id non? Nostrum totam vero voluptate aliquam
-                iste dolorum voluptatibus. Voluptate illum earum sunt. Architecto quaerat provident
-                optio! Eveniet nesciunt dolorum, natus temporibus autem aperiam placeat eius
-                delectus itaque alias. Facere voluptatibus ipsam optio quos quaerat tenetur dolorum
-                aut, in nostrum laboriosam corporis porro. Iste, cupiditate numquam. Ipsam animi
-                repellendus ea eos nihil suscipit incidunt veniam. Necessitatibus, veritatis. Dolore
-                dolorum consequuntur saepe doloribus atque a maiores aliquam est adipisci, ad ipsam
-                optio harum eum. Recusandae vero harum veniam nobis repellendus perspiciatis
-                eligendi amet modi consequatur excepturi, tenetur sed, dolores officia nesciunt
-                molestias quo quia tempore provident esse cumque commodi quod est? Magnam, rem!
-                Voluptatibus.
-              </p>
+              <p v-html="event.description" class="text-xl"></p>
             </div>
           </div>
 
@@ -112,8 +82,18 @@
 </template>
 
 <script setup lang="ts">
+import DefaultLayout from '@/layouts/DefaultLayout.vue'
+import { GetEventById, type GetEventByIdResponse } from '@/services/events'
 import Accordion from 'primevue/accordion'
 import AccordionTab from 'primevue/accordiontab'
+import { onMounted, ref } from 'vue'
+import { useRoute } from 'vue-router'
 
-import DefaultLayout from '@/layouts/DefaultLayout.vue'
+const route = useRoute('/events/[id]')
+
+const event = ref<GetEventByIdResponse>()
+
+onMounted(() => {
+  GetEventById(route.params.id).then(({ data }) => (event.value = data.value))
+})
 </script>

@@ -1,15 +1,10 @@
 import { useAuth0 } from '@auth0/auth0-vue'
+import { useLocalStorage } from '@vueuse/core'
 import { defineStore } from 'pinia'
-import { onMounted, ref } from 'vue'
 
 const useAuthStore = defineStore('auth', () => {
-  const token = ref<string>()
+  const token = useLocalStorage<string>('accessToken', null)
   const { getAccessTokenSilently } = useAuth0()
-
-  onMounted(async () => {
-    if (token.value) return
-    await getToken()
-  })
 
   async function getToken() {
     token.value = await getAccessTokenSilently()

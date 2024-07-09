@@ -17,4 +17,20 @@ axiosClient.interceptors.request.use(
   (error) => Promise.reject(error)
 )
 
+axiosClient.interceptors.response.use(
+  (_) => _,
+  (error) => {
+    const originalRequest = error.config
+
+    if (error?.response?.status === 401 && !originalRequest._retry) {
+      originalRequest._retry = true
+      return authStore.getToken().then(() => {
+        return axiosClient(originalRequest)
+      })
+    }
+
+    return Promise.reject(error)
+  }
+)
+
 export default axiosClient

@@ -9,3 +9,10 @@ export enum ResultStatus {
   CriticalError = 7,
   Unavailable = 8
 }
+
+export enum EventStatus {
+  Canceled = 0,
+  Draft = 1,
+  Published = 2,
+  Completed = 3
+}

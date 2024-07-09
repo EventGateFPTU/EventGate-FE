@@ -1,6 +1,6 @@
 <template>
   <DefaultLayout :has-footer="false">
-    <div class="relative py-40">
+    <div class="relative overflow-hidden py-40">
       <MainEvents />
     </div>
 
@@ -20,10 +20,10 @@
       </div>
     </div>
 
-    <div class="pb-[1000px]"></div>
+    <div class="pb-[1100px]"></div>
 
     <img fill="none" src="@/assets/background-logo.png" class="absolute top-0 z-0 w-full" />
-    <div class="absolute bottom-0 z-10 w-full">
+    <div class="absolute bottom-0 z-10 w-full overflow-hidden">
       <Footer />
     </div>
   </DefaultLayout>

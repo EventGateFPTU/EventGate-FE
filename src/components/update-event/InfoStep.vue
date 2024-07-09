@@ -2,32 +2,24 @@
   <div class="w-[80vw] rounded-3xl bg-white">
     <form @submit="onSubmit" class="space-y-20 p-10" @keydown.enter.prevent>
       <h2 class="text-3xl">THÔNG TIN SỰ KIỆN</h2>
-      <div>
-        <FileUploader
-          name="background"
-          :width="1280"
-          :height="720"
-          desc="Thêm ảnh nền sự kiện"
-          @update:file="backgroundImage = $event"
-        />
-        <small id="backgroundImage-help" class="p-error">
-          {{ backgroundImageError }}
-        </small>
-      </div>
+      <FileUploader
+        name="background"
+        :width="1280"
+        :height="720"
+        desc="Thêm ảnh nền sự kiện"
+        :fileUrl="event.backgroundImageUrl"
+        @update:file="backgroundImage = $event"
+      />
 
       <div class="grid grid-cols-4 gap-8">
-        <div>
-          <FileUploader
-            name="banner"
-            :width="720"
-            :height="958"
-            desc="Thêm banner sự kiện"
-            @update:file="bannerImage = $event"
-          />
-          <small id="bannerImage-help" class="p-error">
-            {{ bannerImageError }}
-          </small>
-        </div>
+        <FileUploader
+          name="banner"
+          :width="720"
+          :height="958"
+          desc="Thêm banner sự kiện"
+          :fileUrl="event.bannerImageUrl"
+          @update:file="bannerImage = $event"
+        />
         <div class="col-span-3 space-y-2">
           <div class="flex flex-col gap-4">
             <label for="title">Tên sự kiện</label>
@@ -58,7 +50,7 @@
       <div class="space-y-4">
         <div class="flex flex-col gap-2">
           <label for="category">Thể loại sự kiện</label>
-          <CategoriesTagsInput v-model:category-ids="categoryIds" />
+          <CategoriesTagsInput :categories="event.categories" v-model:category-ids="categoryIds" />
         </div>
 
         <div>
@@ -84,14 +76,22 @@
         </div>
       </div>
 
-      <Button type="submit" class="flex w-full justify-center">Save</Button>
+      <div class="grid grid-cols-3 gap-4">
+        <Button type="submit" class="flex justify-center">Save</Button>
+        <Button class="col-span-2 flex justify-center" @click="nextStep">Next</Button>
+      </div>
     </form>
   </div>
 </template>
 
 <script setup lang="ts">
 import { FileUploader } from '@/components/file-upload'
-import { CreateEvent, UploadBackground, UploadBanner } from '@/services/events'
+import {
+  UpdateEvent,
+  UploadBackground,
+  UploadBanner,
+  type GetEventByIdResponse
+} from '@/services/events'
 import { toTypedSchema } from '@vee-validate/zod'
 import Button from 'primevue/button'
 import Editor from 'primevue/editor'
@@ -99,14 +99,18 @@ import InputText from 'primevue/inputtext'
 import { useToast } from 'primevue/usetoast'
 import { useForm } from 'vee-validate'
 import { ref, watchEffect } from 'vue'
-import { useRouter } from 'vue-router'
 import * as z from 'zod'
 import CategoriesTagsInput from './CategoriesTagsInput.vue'
+import { EventStatus } from '@/types/enums'
+
+const props = defineProps<{
+  event: GetEventByIdResponse
+  nextStep: () => void
+}>()
 
 const categoryIds = ref<string[]>([])
 
 const toast = useToast()
-const router = useRouter()
 
 const formSchema = toTypedSchema(
   z.object({
@@ -127,8 +131,15 @@ watchEffect(() => {
 const backgroundImageError = ref<string>()
 const bannerImageError = ref<string>()
 
+const value = ref('<div>Hello World!</div><div>PrimeVue <b>Editor</b> Rocks</div><div><br></div>')
+
 const { defineField, handleSubmit, errors } = useForm({
-  validationSchema: formSchema
+  validationSchema: formSchema,
+  initialValues: {
+    title: props.event?.title,
+    description: props.event?.description,
+    location: props.event?.location
+  }
 })
 
 const [title] = defineField('title')
@@ -136,30 +147,21 @@ const [location] = defineField('location')
 const [description] = defineField('description')
 
 const onSubmit = handleSubmit(async (values) => {
-  if (!backgroundImage.value) {
-    backgroundImageError.value = 'Background image required'
-    return
-  }
-  if (!bannerImage.value) {
-    bannerImageError.value = 'Banner image required'
-    return
-  }
-
-  const { data } = await CreateEvent({
+  await UpdateEvent(props.event.id, {
     title: values.title,
     description: values.description,
     location: values.location,
+    status: EventStatus.Draft,
     categoryIds: categoryIds.value
   })
 
-  const eventId = data.value.id
+  const eventId = props.event.id
 
-  await Promise.all([
-    UploadBackground(eventId, backgroundImage.value),
-    UploadBanner(eventId, bannerImage.value)
-  ])
+  const promises = []
+  if (backgroundImage.value) promises.push(UploadBackground(eventId, backgroundImage.value))
+  if (bannerImage.value) promises.push(UploadBanner(eventId, bannerImage.value))
 
-  await router.push(`/organizer/create-event/${eventId}`)
+  await Promise.all(promises)
 
   toast.add({
     summary: 'Save draft successfully',

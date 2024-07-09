@@ -1,13 +1,11 @@
 <template>
   <Stepper :steps>
-    <template #Info="{ nextStep }">
+    <template #Info>
       <div class="pb-32">
-        <InfoStep :nextStep />
+        <InfoStep />
       </div>
     </template>
-    <template #Tickets="{ nextStep }">
-      <TicketsStep :nextStep />
-    </template>
+    <template #Tickets> </template>
     <template #Settings>
       <div class="w-[80vw] space-y-20 rounded-3xl bg-white p-10">fdsa</div>
     </template>
@@ -15,12 +13,9 @@
 </template>
 
 <script setup lang="ts">
-import { Stepper } from '@/components/stepper'
-import type { Step } from '@/components/stepper/types'
-import InputText from 'primevue/inputtext'
+import { Stepper, type Step } from '@/components/ui/stepper'
 import { ref } from 'vue'
 import InfoStep from './InfoStep.vue'
-import TicketsStep from './TicketsStep.vue'
 
 const steps: Step[] = [
   {

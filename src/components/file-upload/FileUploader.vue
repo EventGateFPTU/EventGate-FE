@@ -9,7 +9,7 @@
       :for="name"
       class="flex min-h-72 w-full cursor-pointer flex-col items-center justify-center rounded-2xl border-2 border-dashed border-gray-300 bg-gray-50 hover:bg-gray-100"
     >
-      <template v-if="file == null">
+      <template v-if="file == null && !fileUrl">
         <div class="flex flex-col items-center justify-center space-y-2 pb-6 pt-5">
           <img src="@/assets/upload-logo.png" />
           <p class="text-xs text-gray-500">{{ desc }}</p>
@@ -18,10 +18,14 @@
         <input :id="name" type="file" class="hidden" @change="onFileChanged" />
       </template>
       <div v-else class="p-4">
-        <img :src="image?.src" class="max-h-full max-w-full" />
+        <img :src="fileUrl ?? image?.src" class="max-h-full max-w-full" />
       </div>
     </label>
-    <Button v-if="file" class="absolute right-4 top-4" severity="danger" @click="file = null"
+    <Button
+      v-if="fileUrl ?? file"
+      class="absolute right-4 top-4"
+      severity="danger"
+      @click="file = null"
       >X</Button
     >
   </div>
@@ -33,19 +37,23 @@
 import Button from 'primevue/button'
 import Toast from 'primevue/toast'
 import { useToast } from 'primevue/usetoast'
-import { computed, ref, watchEffect } from 'vue'
+import { computed, onMounted, ref, toRefs, watchEffect } from 'vue'
 
 const props = defineProps<{
+  fileUrl?: string
   width: number
   height: number
   desc: string
   name: string
 }>()
 
+const { fileUrl } = toRefs(props)
+
+onMounted(() => {})
+
 const emit = defineEmits(['update:file'])
 
 const file = ref<File | null>()
-watchEffect(() => emit('update:file', file))
 const toast = useToast()
 
 const image = computed(() => {
@@ -72,6 +80,7 @@ function onFileChanged(event: Event) {
       })
     } else {
       file.value = f
+      emit('update:file', file.value)
     }
   })
 }

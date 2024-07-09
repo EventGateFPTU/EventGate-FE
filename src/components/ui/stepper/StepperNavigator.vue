@@ -4,12 +4,12 @@
       class="flex items-center gap-4 rounded-full border-2 bg-gray-50 p-4 shadow-2xl drop-shadow-2xl"
     >
       <div
-        v-for="step in steps.sort((x) => x.index)"
+        v-for="step in steps!.sort((x) => x.index)"
         :key="step.key"
         class="flex items-center gap-4"
         :class="{
-          'pl-2': step.index == 1 && !isCurrentStep(step),
-          'pr-2': steps.length == step.index && !isCurrentStep(step)
+          ' pl-2': step.index == 1 && !isCurrentStep(step),
+          'pr-2': steps!.length == step.index && !isCurrentStep(step)
         }"
       >
         <p
@@ -23,6 +23,9 @@
         <div
           class="flex items-center gap-2 text-gray-600 hover:cursor-pointer"
           @click="$emit('update:step', step)"
+          :class="{
+            'pointer-events-none opacity-40': step.index > currentStep!.index
+          }"
         >
           <Button
             class="size-full rounded-full border-2 bg-white text-gray-600"
