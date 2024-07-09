@@ -33,7 +33,7 @@
 import Button from 'primevue/button'
 import Toast from 'primevue/toast'
 import { useToast } from 'primevue/usetoast'
-import { computed, ref } from 'vue'
+import { computed, ref, watchEffect } from 'vue'
 
 const props = defineProps<{
   width: number
@@ -42,7 +42,10 @@ const props = defineProps<{
   name: string
 }>()
 
+const emit = defineEmits(['update:file'])
+
 const file = ref<File | null>()
+watchEffect(() => emit('update:file', file))
 const toast = useToast()
 
 const image = computed(() => {

@@ -10,6 +10,7 @@ import App from './App.vue'
 import router from './router'
 
 import PrimeVue from 'primevue/config'
+import { VueQueryPlugin } from '@tanstack/vue-query'
 
 import { createAuth0 } from '@auth0/auth0-vue'
 import DialogService from 'primevue/dialogservice'
@@ -22,6 +23,7 @@ app.use(DialogService)
 app.use(ToastService)
 app.use(createPinia())
 app.use(router)
+app.use(VueQueryPlugin)
 
 app.use(
   createAuth0({

@@ -1,6 +1,6 @@
 <template>
   <div
-    class="absolute left-1/2 top-1/2 z-10 flex -translate-x-1/2 -translate-y-1/2 justify-center gap-[calc(100vw_*_0.518)]"
+    class="absolute left-1/2 top-1/2 z-20 flex -translate-x-1/2 -translate-y-1/2 justify-center gap-[calc(100vw_*_0.518)]"
   >
     <div class="rounded-3xl bg-white px-3 py-6 hover:cursor-pointer" @click="prev">
       <i class="pi pi-chevron-left" style="font-size: 1.5rem"></i>
@@ -10,6 +10,7 @@
     </div>
   </div>
   <Swiper
+    autoplay
     :slidesPerView="3"
     :centerSlides="true"
     :loop="true"
@@ -18,7 +19,6 @@
     ref="swiperRef"
     class="scale-125"
     spaceBetween="0"
-    :breakpoints="{}"
     @swiper="setSwiperRef"
   >
     <SwiperSlide v-for="product in products" :key="product.id" v-slot="{ isActive, isNext }">
@@ -31,7 +31,7 @@
         }"
       >
         <img
-          :src="'https://primefaces.org/cdn/primevue/images/product/' + product.image"
+          src="@/assets/test-background.png"
           :alt="product.name"
           class="border-round w-[1000px] rounded-3xl"
         />

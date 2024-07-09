@@ -1,15 +1,17 @@
 import axios, { type AxiosInstance } from 'axios'
-import { useAuth0 } from '@auth0/auth0-vue'
+import useAuthStore from '@/stores/useAuthStore'
 
 const axiosClient: AxiosInstance = axios.create({
   baseURL: '/'
 })
 
-const { getAccessTokenSilently } = useAuth0()
+const authStore = useAuthStore()
 
+axiosClient.defaults.baseURL = import.meta.env.VITE_API_URL
 axiosClient.interceptors.request.use(
-  (config) => {
-    config.headers.set('X-CSRF', '1')
+  async (config) => {
+    if (!authStore.token) await authStore.getToken()
+    config.headers.setAuthorization(`Bearer ${authStore.token}`)
     return config
   },
   (error) => Promise.reject(error)

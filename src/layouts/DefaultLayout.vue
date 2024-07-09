@@ -21,7 +21,7 @@
                 </div>
               </template>
               <template #submenuheader="{ item }">
-                <span class="text-primary font-bold">{{ item.label }}</span>
+                <span class="font-bold text-primary">{{ item.label }}</span>
               </template>
               <template #item="{ item, props }">
                 <a class="align-items-center flex" v-bind="props.action">
@@ -107,7 +107,7 @@
         <slot />
       </div>
     </div>
-    <div v-if="hasFooter" class="absolute bottom-0 z-0 w-full">
+    <div v-if="hasFooter" class="absolute bottom-0 z-10 w-full">
       <Footer />
     </div>
   </div>
