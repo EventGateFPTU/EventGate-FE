@@ -161,6 +161,7 @@ const onSubmit = handleSubmit(async (values) => {
 
   await router.push(`/organizer/create-event/${eventId}`)
 
+  console.log(1)
   toast.add({
     summary: 'Save draft successfully',
     life: 3000
