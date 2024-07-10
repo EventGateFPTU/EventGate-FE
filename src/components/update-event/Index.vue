@@ -1,12 +1,12 @@
 <template>
-  <Stepper :steps>
+  <Stepper :steps :initialStep @update:step="(s) => (searchParams.step = s.key)">
     <template #Info="{ nextStep }">
       <div class="pb-32">
         <InfoStep v-if="event" :event :nextStep />
       </div>
     </template>
     <template #Tickets="{ nextStep }">
-      <TicketsStep :nextStep />
+      <TicketsStep v-if="event" :event :nextStep />
     </template>
     <template #Settings>
       <div class="w-[80vw] space-y-20 rounded-3xl bg-white p-10">fdsa</div>
@@ -21,8 +21,12 @@ import TicketsStep from './TicketsStep.vue'
 import { useRoute } from 'vue-router/auto'
 import { onMounted, ref } from 'vue'
 import { GetEventById, type GetEventByIdResponse } from '@/services/events'
+import { useUrlSearchParams } from '@vueuse/core'
 
 const route = useRoute('/organizer/create-event/[id]')
+const searchParams = useUrlSearchParams<{
+  step: string
+}>()
 
 const event = ref<GetEventByIdResponse>()
 
@@ -44,4 +48,6 @@ const steps: Step[] = [
     key: 'Settings'
   }
 ]
+
+const initialStep = steps.find((x) => x.key == searchParams.step)?.index
 </script>

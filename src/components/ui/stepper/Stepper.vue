@@ -21,19 +21,25 @@ import type { Step } from './types'
 
 const props = defineProps<{
   steps: Step[]
+  initialStep?: number
   class?: HTMLAttributes['class']
   contentClass?: HTMLAttributes['class']
 }>()
 
+const emit = defineEmits<{
+  (e: 'update:step', step: Step): void
+}>()
+
 const { steps } = toRefs(props)
 
-const currentStep = ref<Step>(steps.value[0])
+const currentStep = ref<Step>(steps.value[props.initialStep ? props.initialStep - 1 : 0])
 
 const updateStep = (step: Step) => {
   if (!currentStep?.value) return
   if (step.index > currentStep?.value.index + 1) return
 
   currentStep.value = step
+  emit('update:step', step)
 }
 
 const nextStep = () => {

@@ -2,40 +2,9 @@
   <div class="w-[80vw] space-y-20 rounded-3xl bg-white p-10">
     <h2 class="text-3xl">THỜI GIAN & LOẠI VÉ</h2>
 
-    <Panel toggleable>
-      <template #togglericon="{ collapsed }">
-        <i
-          class="pi pi-angle-right transition-all duration-200"
-          :class="{
-            'rotate-90': !collapsed
-          }"
-        ></i>
-      </template>
-
-      <div class="space-y-8">
-        <div class="space-y-4">
-          <h2 class="text-2xl">Ngày sự kiện</h2>
-          <div class="flex gap-4">
-            <div class="space-x-2">
-              <label for="fromDate">Thời gian bắt đầu</label>
-              <Calendar showIcon />
-            </div>
-            <div class="space-x-2">
-              <label for="toDate">Thời gian kết thúc</label>
-              <Calendar showIcon />
-            </div>
-          </div>
-        </div>
-
-        <div class="space-y-4">
-          <h2 class="text-2xl">Loại vé</h2>
-          <Button
-            class="border-1 flex w-full justify-center border-dashed bg-inherit text-inherit hover:border-none hover:bg-[#10b981] hover:text-white"
-            >+ Tạo loại vé</Button
-          >
-        </div>
-      </div>
-    </Panel>
+    <template v-if="shows.length > 0">
+      <ShowPanel v-for="show in shows" :key="show.id" :show />
+    </template>
 
     <Button
       class="flex w-full justify-center border-dashed bg-inherit text-inherit hover:border-none hover:bg-[#10b981] hover:text-white"
@@ -54,8 +23,50 @@
 import Panel from 'primevue/panel'
 import Calendar from 'primevue/calendar'
 import Button from 'primevue/button'
+import { computed, onMounted, ref, unref } from 'vue'
+import { usePagination } from '@/composables/usePagination'
+import { useQuery } from '@tanstack/vue-query'
+import { query } from '@/lib/axios'
+import { GetEvents } from '@/services/events'
+import { toRefs, type MaybeRef } from '@vueuse/core'
+import { GetEventShows } from '@/services/shows'
+import type { BaseEvent, BaseShow } from '@/types/items'
+import ShowPanel from './ShowPanel.vue'
 
-defineProps<{
+const props = defineProps<{
+  event: BaseEvent
   nextStep: () => void
 }>()
+
+const eventId = computed(() => props.event.id)
+const { pageNumber, pageSize } = usePagination(1, 5)
+
+const shows = ref<BaseShow[]>([])
+
+onMounted(() => {
+  GetEventShows(props.event.id, pageNumber.value, pageSize.value).then(({ data }) => {
+    shows.value = data.value.shows
+  })
+})
+
+// const { fetchShowsSuccess, refetchShows, showsRes } = useShows(eventId)
+
+// function useShows(eventId: MaybeRef<string>) {
+//   const { pageNumber, pageSize } = usePagination(1, 5)
+
+//   const {
+//     data: showsRes,
+//     isSuccess: fetchShowsSuccess,
+//     refetch: refetchShows
+//   } = useQuery({
+//     queryKey: ['shows', { pageNumber, pageSize, eventId }],
+//     queryFn: () => query(GetEventShows(unref(eventId), pageNumber.value, pageSize.value))
+//   })
+
+//   return {
+//     showsRes,
+//     fetchShowsSuccess,
+//     refetchShows
+//   }
+// }
 </script>

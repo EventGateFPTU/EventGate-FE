@@ -131,8 +131,6 @@ watchEffect(() => {
 const backgroundImageError = ref<string>()
 const bannerImageError = ref<string>()
 
-const value = ref('<div>Hello World!</div><div>PrimeVue <b>Editor</b> Rocks</div><div><br></div>')
-
 const { defineField, handleSubmit, errors } = useForm({
   validationSchema: formSchema,
   initialValues: {

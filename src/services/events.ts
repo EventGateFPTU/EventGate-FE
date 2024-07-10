@@ -1,6 +1,7 @@
+import type { EventStatus } from '@/types/enums'
+import type { BaseCategory, BaseEvent } from '@/types/items'
 import type { PaginationValue, Response } from '@/types/results'
 import axiosClient from './axios'
-import type { EventStatus } from '@/types/enums'
 
 export function GetEvents(pageNumber: number, pageSize: number, searchTerm?: string) {
   return axiosClient.get<

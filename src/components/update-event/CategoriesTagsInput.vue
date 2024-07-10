@@ -73,6 +73,7 @@ import { Check, X } from 'lucide-vue-next'
 import { computed, ref, watch, watchEffect } from 'vue'
 import { Badge } from '../ui/badge'
 import Input from '../ui/input/Input.vue'
+import type { BaseCategory } from '@/types/items'
 
 const props = defineProps<{
   categoryIds: string[]
