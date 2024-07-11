@@ -2,35 +2,51 @@
   <div class="w-[80vw] space-y-20 rounded-3xl bg-white p-10">
     <h2 class="text-3xl">THỜI GIAN & LOẠI VÉ</h2>
 
-    <template v-if="shows.length > 0">
-      <ShowPanel v-for="show in shows" :key="show.id" :show />
-    </template>
+    <div class="space-y-4">
+      <ShowPanel
+        v-for="show in shows"
+        :isNew="false"
+        :key="show.id"
+        :show
+        @hasError="check(show.id, $event)"
+        @remove:show="DeleteShow(show.id).then(() => refetch())"
+      />
+
+      <ShowPanel
+        v-for="(show, index) in showsToAdd"
+        :isNew="true"
+        :key="show.index"
+        :show
+        @hasError="check(show.index, $event)"
+        @remove:show="showsToAdd.splice(index, 1)"
+      />
+    </div>
 
     <Button
       class="flex w-full justify-center border-dashed bg-inherit text-inherit hover:border-none hover:bg-[#10b981] hover:text-white"
+      @click="showsToAdd.push({ index: cur++, endsAt: undefined, startsAt: undefined })"
     >
       + Tạo suất diễn
     </Button>
 
+    <small class="p-error">
+      {{ hasError ? 'Please fill in all the fields' : null }}
+    </small>
+
     <div class="grid grid-cols-3 gap-4">
-      <Button class="flex justify-center">Save</Button>
+      <Button class="flex justify-center" :disabled="hasError" @click="save">Save</Button>
       <Button class="col-span-2 flex justify-center" @click="nextStep">Next</Button>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import Panel from 'primevue/panel'
-import Calendar from 'primevue/calendar'
-import Button from 'primevue/button'
-import { computed, onMounted, ref, unref } from 'vue'
 import { usePagination } from '@/composables/usePagination'
-import { useQuery } from '@tanstack/vue-query'
-import { query } from '@/lib/axios'
-import { GetEvents } from '@/services/events'
-import { toRefs, type MaybeRef } from '@vueuse/core'
-import { GetEventShows } from '@/services/shows'
+import { CreateShow, DeleteShow, GetEventShows } from '@/services/shows'
 import type { BaseEvent, BaseShow } from '@/types/items'
+import Button from 'primevue/button'
+import { useToast } from 'primevue/usetoast'
+import { computed, onMounted, ref } from 'vue'
 import ShowPanel from './ShowPanel.vue'
 
 const props = defineProps<{
@@ -38,16 +54,68 @@ const props = defineProps<{
   nextStep: () => void
 }>()
 
+const toast = useToast()
+
 const eventId = computed(() => props.event.id)
 const { pageNumber, pageSize } = usePagination(1, 5)
 
+type ShowToAdd = {
+  index: number
+  startsAt?: Date
+  endsAt?: Date
+}
 const shows = ref<BaseShow[]>([])
+const showsToAdd = ref<ShowToAdd[]>([])
+let cur = 0
+const errors = ref<
+  {
+    id: string | number
+    hasError: boolean
+  }[]
+>([])
 
-onMounted(() => {
+const hasError = computed(() => errors.value.findIndex((x) => x.hasError) > -1)
+
+const check = (id: string | number, val: boolean) => {
+  const err = errors.value.find((x) => x.id == id)
+  if (!err)
+    errors.value.push({
+      id: id,
+      hasError: val
+    })
+  else {
+    err.hasError = val
+  }
+}
+
+onMounted(() => refetch())
+
+const refetch = () => {
   GetEventShows(props.event.id, pageNumber.value, pageSize.value).then(({ data }) => {
     shows.value = data.value.shows
   })
-})
+}
+
+async function save() {
+  const promises = []
+  for (const showToAdd of showsToAdd.value) {
+    promises.push(
+      CreateShow({
+        eventId: props.event.id,
+        title: 'afds',
+        startsAt: showToAdd.startsAt!,
+        endsAt: showToAdd.endsAt!
+      })
+    )
+  }
+
+  await Promise.all(promises)
+
+  toast.add({
+    summary: 'Save draft successfully',
+    life: 3000
+  })
+}
 
 // const { fetchShowsSuccess, refetchShows, showsRes } = useShows(eventId)
 

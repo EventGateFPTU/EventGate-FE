@@ -30,5 +30,5 @@ type CreateTicketTypeRequest = {
 }
 
 export function createTicketType(req: CreateTicketTypeRequest) {
-  return axiosClient.post(`/shows`, req)
+  return axiosClient.post(`/ticket-types`, req)
 }

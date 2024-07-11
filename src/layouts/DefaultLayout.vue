@@ -1,5 +1,5 @@
 <template>
-  <div class="relative min-h-[calc(100vh_-_8rem)] bg-[#4A3F9F]">
+  <div class="relative min-h-[calc(100vh_-_8rem)]">
     <div class="flex h-32 items-center justify-between bg-[#BFFF50] px-24">
       <div class="w-80">
         <div v-if="isAuthenticated">
@@ -105,7 +105,7 @@
       <div class="absolute top-0 h-screen overflow-hidden">
         <img fill="none" src="@/assets/background-logo.png" class="z-0 w-full" />
       </div>
-      <div class="relative z-20">
+      <div class="relative z-20 h-full min-h-screen bg-[#4A3F9F]">
         <slot />
       </div>
     </div>
