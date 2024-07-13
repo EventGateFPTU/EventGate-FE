@@ -4,15 +4,23 @@
       <div class="relative">
         <img src="@/assets/search-background.png" alt="" class="w-full" />
         <div
-          class="absolute bottom-10 left-10 flex h-60 w-[60vw] flex-col space-y-4 rounded-lg bg-[#28207E] bg-opacity-50 p-4"
+          class="absolute bottom-10 left-40 flex h-60 w-[60vw] flex-col space-y-4 rounded-lg bg-[#28207E] bg-opacity-50 p-4"
         >
           <div class="relative flex items-center">
-            <InputText class="h-12 w-[40vw] pl-10 pr-10 drop-shadow-md" placeholder="Tên sự kiện" />
+            <InputText
+              v-model="searchTerm"
+              class="h-12 w-[40vw] pl-10 pr-10 drop-shadow-md"
+              placeholder="Tên sự kiện"
+            />
             <span class="absolute flex items-center justify-center px-4">
               <i class="pi pi-search"></i>
             </span>
           </div>
-          <InputText class="h-12 w-[30vw] pl-4 pr-10 drop-shadow-md" placeholder="Vị trí của bạn" />
+          <InputText
+            v-model="location"
+            class="h-12 w-[30vw] pl-4 pr-10 drop-shadow-md"
+            placeholder="Vị trí của bạn"
+          />
 
           <div class="flex items-end justify-between">
             <div class="flex flex-col gap-2">
@@ -20,7 +28,7 @@
               <Calendar v-model="date" showIcon class="w-[20vw]" :showOnFocus="false" />
             </div>
             <div>
-              <Button>Search</Button>
+              <Button @click="() => refetchEvents()">Search</Button>
             </div>
           </div>
         </div>
@@ -30,7 +38,7 @@
         <div v-if="fetchEventsSuccess" class="container grid grid-cols-5 gap-8 pt-10">
           <Card v-for="event in eventsRes?.data" :key="event.id">
             <template #header>
-              <img alt="user header" :src="event.backgroundImageUrl" />
+              <img alt="user header" src="@/assets/test-background.png" class="rounded-t-xl" />
             </template>
             <template #title>{{ event.title }}</template>
             <template #content> price related thing here </template>
@@ -48,28 +56,30 @@
 </template>
 
 <script setup lang="ts">
-import Calendar from 'primevue/calendar'
+import { usePagination } from '@/composables/usePagination'
 import DefaultLayout from '@/layouts/DefaultLayout.vue'
+import { query } from '@/lib/axios'
+import { SearchEvents } from '@/services/events'
+import { useQuery } from '@tanstack/vue-query'
+import Button from 'primevue/button'
+import Calendar from 'primevue/calendar'
+import Card from 'primevue/card'
 import InputText from 'primevue/inputtext'
 import { ref } from 'vue'
-import Button from 'primevue/button'
-import { usePagination } from '@/composables/usePagination'
-import { useQuery } from '@tanstack/vue-query'
-import { query } from '@/lib/axios'
-import { GetEvents } from '@/services/events'
-import Card from 'primevue/card'
 
 const props = defineProps<{
   searchTerm?: string
 }>()
 
-const date = ref()
+const { eventsRes, fetchEventsSuccess, refetchEvents, searchTerm, categoryIds, date, location } =
+  useSearchEvents(props.searchTerm)
 
-const { eventsRes, fetchEventsSuccess, refetchEvents } = useEvents()
-
-function useEvents() {
+function useSearchEvents(search?: string) {
   const { pageNumber, pageSize } = usePagination(1, 5)
-  const searchTerm = ref<string>()
+  const searchTerm = ref<string>(search ?? '')
+  const location = ref<string>()
+  const date = ref<Date>()
+  const categoryIds = ref<string[]>([])
 
   const {
     data: eventsRes,
@@ -77,13 +87,28 @@ function useEvents() {
     refetch: refetchEvents
   } = useQuery({
     queryKey: ['events', { pageNumber, pageSize }],
-    queryFn: () => query(GetEvents(pageNumber.value, pageSize.value, searchTerm.value))
+    queryFn: () =>
+      query(
+        SearchEvents(
+          pageNumber.value,
+          pageSize.value,
+          categoryIds.value,
+          searchTerm.value,
+          location.value,
+          date.value
+        )
+      )
   })
 
   return {
     eventsRes,
     fetchEventsSuccess,
-    refetchEvents
+    refetchEvents,
+
+    searchTerm,
+    location,
+    date,
+    categoryIds
   }
 }
 </script>

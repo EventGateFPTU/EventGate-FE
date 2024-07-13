@@ -22,8 +22,28 @@ export function GetFeaturedEvents(pageNumber: number, pageSize: number, searchTe
   })
 }
 
+export function SearchEvents(
+  pageNumber: number,
+  pageSize: number,
+  categoryIds: string[],
+  searchTerm?: string,
+  location?: string,
+  date?: Date
+) {
+  return axiosClient.post<Response<PaginationResponse<BaseEvent>>>('/events/search', {
+    pageNumber,
+    pageSize,
+    searchTerm,
+    location,
+    date,
+    categoryIds: categoryIds ?? []
+  })
+}
+
 export type GetEventByIdResponse = BaseEvent & {
   categories: BaseCategory[]
+  organizerImageUrl: string
+  organizerDescription: string
 }
 
 export function GetEventById(eventId: string) {

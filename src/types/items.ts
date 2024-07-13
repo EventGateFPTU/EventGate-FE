@@ -26,6 +26,11 @@ export interface BaseTicketType {
   id: string
   name: string
   description: string
+  imageUrl: string
+  price: number
+  fromDate: Date
+  toDate: Date
+  amount: number
 }
 
 export interface BaseStaff {
