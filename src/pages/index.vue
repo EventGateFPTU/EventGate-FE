@@ -1,5 +1,5 @@
 <template>
-  <DefaultLayout :has-footer="false">
+  <DefaultLayout :has-footer="false" :has-user-indicator="true">
     <div class="relative overflow-hidden py-40">
       <MainEvents />
     </div>

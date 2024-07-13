@@ -16,7 +16,9 @@ export type ErrorResponse = {
   detail: string
 }
 
-export type PaginationValue = {
+export type PaginationResponse<T> = {
+  data: T[]
   pageNumber: number
   pageSize: number
+  count: number
 }

@@ -71,7 +71,7 @@
 
           <div class="flex flex-col gap-4">
             <label for="organizationDesc">Thông tin ban tổ chức</label>
-            <InputText id="organizationDesc" placeholder="Thông tin ban tổ chức" />
+            <Textarea id="organizationDesc" placeholder="Thông tin ban tổ chức" />
           </div>
         </div>
       </div>
@@ -101,7 +101,8 @@ import { useForm } from 'vee-validate'
 import { ref, watchEffect } from 'vue'
 import * as z from 'zod'
 import CategoriesTagsInput from './CategoriesTagsInput.vue'
-import { EventStatus } from '@/types/enums'
+import Textarea from 'primevue/textarea'
+import { EventStatus, eventStatusToNumber } from '@/types/enums'
 
 const props = defineProps<{
   event: GetEventByIdResponse
@@ -116,7 +117,9 @@ const formSchema = toTypedSchema(
   z.object({
     title: z.string().max(256),
     location: z.string().max(256),
-    description: z.string().max(8192)
+    description: z.string().max(8192),
+    organizationName: z.string().max(256),
+    organizationDesc: z.string().max(8192)
   })
 )
 
@@ -149,7 +152,7 @@ const onSubmit = handleSubmit(async (values) => {
     title: values.title,
     description: values.description,
     location: values.location,
-    status: EventStatus.Draft,
+    status: eventStatusToNumber(EventStatus.Draft),
     categoryIds: categoryIds.value
   })
 

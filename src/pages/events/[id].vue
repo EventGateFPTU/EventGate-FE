@@ -1,5 +1,5 @@
 <template>
-  <DefaultLayout :has-footer="true">
+  <DefaultLayout :has-footer="true" :has-user-indicator="true">
     <div class="relative flex w-full justify-center pt-32" v-if="event">
       <div class="container space-y-16 pb-[400px]">
         <div>

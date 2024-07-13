@@ -1,6 +1,17 @@
 <template>
-  <CreateTicketDialog v-model:visible="visible" />
-  <Panel toggleable>
+  <CreateTicketDialog
+    :isNew
+    :showId="show.id.toString()"
+    v-model:visible="visible"
+    @submit="
+      (t) => {
+        if (isNew) show.ticketTypeIds!.push(t.id)
+        else refetchTicketTypes()
+        visible = false
+      }
+    "
+  />
+  <Panel toggleable collapsed>
     <template #togglericon="{ collapsed }">
       <i
         class="pi pi-angle-right transition-all duration-200"
@@ -17,24 +28,39 @@
           <Button severity="danger" @click="() => confirmRemove()"><X /></Button>
         </div>
         <div class="flex gap-4">
-          <div class="flex space-x-2">
+          <div class="flex items-baseline space-x-2">
             <label for="startsAt">Thời gian bắt đầu</label>
             <div class="flex flex-col">
-              <Calendar v-model="startsAt" :invalid="startsAtError != null" showIcon />
+              <Calendar
+                v-model="startsAt"
+                dateFormat="dd/mm/yy"
+                :invalid="startsAtError != null"
+                showIcon
+              />
               <small id="startsAt-help" class="p-error">
                 {{ startsAtError }}
               </small>
             </div>
           </div>
-          <div class="flex space-x-2">
+          <div class="flex items-baseline space-x-2">
             <label for="endsAt">Thời gian kết thúc</label>
             <div class="flex flex-col">
-              <Calendar v-model="endsAt" showIcon />
+              <Calendar v-model="endsAt" dateFormat="dd/mm/yy" showIcon />
               <small id="endsAt-help" class="p-error">
                 {{ endsAtError }}
               </small>
             </div>
           </div>
+        </div>
+      </div>
+
+      <div v-if="fetchTicketTypesSuccess">
+        <div
+          v-for="ticketType in ticketTypesRes?.data"
+          :key="ticketType.id"
+          class="rounded-xl border px-8 py-6"
+        >
+          {{ ticketType.name }}
         </div>
       </div>
 
@@ -51,13 +77,17 @@
 </template>
 
 <script setup lang="ts">
+import { usePagination } from '@/composables/usePagination'
+import { query } from '@/lib/axios'
+import { GetShowTicketTypes } from '@/services/ticketTypes'
+import { useQuery } from '@tanstack/vue-query'
 import { toRefs } from '@vueuse/core'
+import { X } from 'lucide-vue-next'
 import Button from 'primevue/button'
 import Calendar from 'primevue/calendar'
 import Panel from 'primevue/panel'
-import { computed, ref, watch, watchEffect } from 'vue'
-import { X } from 'lucide-vue-next'
 import { useConfirm } from 'primevue/useconfirm'
+import { computed, ref, unref, watchEffect, type MaybeRef } from 'vue'
 import CreateTicketDialog from './CreateTicketDialog.vue'
 
 const props = defineProps<{
@@ -66,8 +96,10 @@ const props = defineProps<{
 }>()
 
 type Show = {
+  id: string | number
   startsAt?: Date
   endsAt?: Date
+  ticketTypeIds?: string[]
 }
 
 const visible = ref(false)
@@ -108,5 +140,29 @@ const confirmRemove = () => {
     },
     reject: () => {}
   })
+}
+
+const { fetchTicketTypesSuccess, refetchTicketTypes, ticketTypesRes } = useTicketTypes(
+  props.show.id as string
+)
+
+function useTicketTypes(showId: MaybeRef<string>) {
+  const { pageNumber, pageSize } = usePagination(1, 5)
+
+  const {
+    data: ticketTypesRes,
+    isSuccess: fetchTicketTypesSuccess,
+    refetch: refetchTicketTypes
+  } = useQuery({
+    queryKey: ['ticket-types', { pageNumber, pageSize, showId: props.show.id }],
+    queryFn: () => query(GetShowTicketTypes(unref(showId), pageNumber.value, pageSize.value)),
+    enabled: !props.isNew
+  })
+
+  return {
+    ticketTypesRes,
+    fetchTicketTypesSuccess,
+    refetchTicketTypes
+  }
 }
 </script>

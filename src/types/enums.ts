@@ -16,3 +16,16 @@ export enum EventStatus {
   Published = 2,
   Completed = 3
 }
+
+export function eventStatusToNumber(status: EventStatus) {
+  switch (status) {
+    case EventStatus.Canceled:
+      return 0
+    case EventStatus.Draft:
+      return 1
+    case EventStatus.Published:
+      return 2
+    case EventStatus.Completed:
+      return 3
+  }
+}

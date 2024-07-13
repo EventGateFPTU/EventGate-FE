@@ -1,15 +1,9 @@
-import type { PaginationValue, Response } from '@/types/results'
+import type { BaseTicketType } from '@/types/items'
+import type { PaginationResponse, Response } from '@/types/results'
 import axiosClient from './axios'
-import type { BaseShow } from '@/types/items'
 
 export function GetShowTicketTypes(showId: string, pageNumber: number, pageSize: number) {
-  return axiosClient.get<
-    Response<
-      PaginationValue & {
-        shows: BaseShow[]
-      }
-    >
-  >(`/shows/${showId}/tickets`, {
+  return axiosClient.get<Response<PaginationResponse<BaseTicketType>>>(`/shows/${showId}/tickets`, {
     params: {
       pageNumber,
       pageSize
@@ -23,12 +17,27 @@ type CreateTicketTypeRequest = {
   description: string
   price: number
   fromDate: Date
-  endDate: Date
+  toDate: Date
   amount: number
   leastAmountBuy: number
   mostAmountBuy: number
+  imageUrl: string
 }
 
-export function createTicketType(req: CreateTicketTypeRequest) {
-  return axiosClient.post(`/ticket-types`, req)
+export function CreateTicketType(req: CreateTicketTypeRequest) {
+  return axiosClient.post<Response<BaseTicketType>>(`/ticket-types`, req)
+}
+
+type TicketTypeItem = {
+  id: string
+  name: string
+  showId: string
+  startsAt: Date
+  endsAt: Date
+}
+export function GetEventTicketTypes(eventId: string, pageNumber: number, pageSize: number) {
+  return axiosClient.get<Response<PaginationResponse<TicketTypeItem>>>(
+    `/events/${eventId}/ticket-types`,
+    { params: { pageNumber, pageSize } }
+  )
 }

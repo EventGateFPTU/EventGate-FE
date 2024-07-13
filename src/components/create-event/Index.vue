@@ -1,15 +1,15 @@
 <template>
-  <Stepper :steps>
-    <template #Info>
-      <div class="pb-32">
-        <InfoStep />
-      </div>
-    </template>
+  <!-- <Stepper :steps>
+    <template #Info> -->
+  <div class="flex justify-center py-32">
+    <InfoStep />
+  </div>
+  <!-- </template>
     <template #Tickets> </template>
     <template #Settings>
       <div class="w-[80vw] space-y-20 rounded-3xl bg-white p-10">fdsa</div>
     </template>
-  </Stepper>
+  </Stepper> -->
 </template>
 
 <script setup lang="ts">

@@ -15,16 +15,18 @@
       <ShowPanel
         v-for="(show, index) in showsToAdd"
         :isNew="true"
-        :key="show.index"
+        :key="show.id"
         :show
-        @hasError="check(show.index, $event)"
+        @hasError="check(show.id, $event)"
         @remove:show="showsToAdd.splice(index, 1)"
       />
     </div>
 
     <Button
       class="flex w-full justify-center border-dashed bg-inherit text-inherit hover:border-none hover:bg-[#10b981] hover:text-white"
-      @click="showsToAdd.push({ index: cur++, endsAt: undefined, startsAt: undefined })"
+      @click="
+        showsToAdd.push({ id: cur++, endsAt: undefined, startsAt: undefined, ticketTypeIds: [] })
+      "
     >
       + Tạo suất diễn
     </Button>
@@ -60,9 +62,10 @@ const eventId = computed(() => props.event.id)
 const { pageNumber, pageSize } = usePagination(1, 5)
 
 type ShowToAdd = {
-  index: number
+  id: number
   startsAt?: Date
   endsAt?: Date
+  ticketTypeIds: string[]
 }
 const shows = ref<BaseShow[]>([])
 const showsToAdd = ref<ShowToAdd[]>([])
@@ -92,7 +95,7 @@ onMounted(() => refetch())
 
 const refetch = () => {
   GetEventShows(props.event.id, pageNumber.value, pageSize.value).then(({ data }) => {
-    shows.value = data.value.shows
+    shows.value = data.value.data
   })
 }
 

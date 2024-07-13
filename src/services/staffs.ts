@@ -1,23 +1,13 @@
-import type { BaseCategory, BaseEvent } from '@/types/items'
+import type { EventStatus } from '@/types/enums'
+import type { BaseCategory, BaseEvent, BaseStaff } from '@/types/items'
 import type { PaginationResponse, Response } from '@/types/results'
 import axiosClient from './axios'
 
-export function GetEvents(pageNumber: number, pageSize: number, searchTerm?: string) {
-  return axiosClient.get<Response<PaginationResponse<BaseEvent>>>('/events', {
+export function GetEventStaffs(eventId: string, pageNumber: number, pageSize: number) {
+  return axiosClient.get<Response<PaginationResponse<BaseStaff>>>(`/events/${eventId}/staffs`, {
     params: {
       pageNumber,
-      pageSize,
-      searchTerm
-    }
-  })
-}
-
-export function GetFeaturedEvents(pageNumber: number, pageSize: number, searchTerm?: string) {
-  return axiosClient.get<Response<PaginationResponse<BaseEvent>>>('/events/featured', {
-    params: {
-      pageNumber,
-      pageSize,
-      searchTerm
+      pageSize
     }
   })
 }
@@ -45,7 +35,7 @@ type UpdateEventRequest = {
   title: string
   description: string
   location: string
-  status: number
+  status: EventStatus
   categoryIds: string[]
 }
 

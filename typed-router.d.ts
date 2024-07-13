@@ -21,7 +21,9 @@ declare module 'vue-router/auto-routes' {
     '/': RouteRecordInfo<'/', '/', Record<never, never>, Record<never, never>>,
     '/create-event': RouteRecordInfo<'/create-event', '/create-event', Record<never, never>, Record<never, never>>,
     '/events/[id]': RouteRecordInfo<'/events/[id]', '/events/:id', { id: ParamValue<true> }, { id: ParamValue<false> }>,
+    '/events/search': RouteRecordInfo<'/events/search', '/events/search', Record<never, never>, Record<never, never>>,
     '/organizer/[id]': RouteRecordInfo<'/organizer/[id]', '/organizer/:id', { id: ParamValue<true> }, { id: ParamValue<false> }>,
     '/organizer/create-event/[id]': RouteRecordInfo<'/organizer/create-event/[id]', '/organizer/create-event/:id', { id: ParamValue<true> }, { id: ParamValue<false> }>,
+    '/organizer/events/[id]': RouteRecordInfo<'/organizer/events/[id]', '/organizer/events/:id', { id: ParamValue<true> }, { id: ParamValue<false> }>,
   }
 }

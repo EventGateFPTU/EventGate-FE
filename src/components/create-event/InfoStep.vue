@@ -70,16 +70,39 @@
       </div>
 
       <div class="grid grid-cols-4 gap-8">
-        <FileUploader name="organizer" :width="257" :height="257" desc="Thêm banner sự kiện" />
+        <FileUploader
+          @update:file="organizationLogoImage = $event"
+          name="organizer"
+          :width="257"
+          :height="257"
+          desc="Thêm banner sự kiện"
+        />
         <div class="col-span-3 space-y-2">
           <div class="flex flex-col gap-4">
             <label for="organizationName">Tên ban tổ chức</label>
-            <InputText id="organizationName" placeholder="Tên ban tổ chức" />
+            <InputText
+              v-model="organizationName"
+              id="organizationName"
+              placeholder="Tên ban tổ chức"
+              :class="{ 'p-invalid': errors.organizationName }"
+            />
+            <small id="organizationName-help" class="p-error">
+              {{ errors.organizationName }}
+            </small>
           </div>
 
           <div class="flex flex-col gap-4">
             <label for="organizationDesc">Thông tin ban tổ chức</label>
-            <InputText id="organizationDesc" placeholder="Thông tin ban tổ chức" />
+            <Textarea
+              v-model="organizationDesc"
+              id="organizationDesc"
+              placeholder="Thông tin ban tổ chức"
+              class="h-[10rem] flex-grow"
+              :class="{ 'p-invalid': errors.organizationDesc }"
+            />
+            <small id="organizationDesc-help" class="p-error">
+              {{ errors.organizationDesc }}
+            </small>
           </div>
         </div>
       </div>
@@ -102,6 +125,8 @@ import { ref, watchEffect } from 'vue'
 import { useRouter } from 'vue-router'
 import * as z from 'zod'
 import CategoriesTagsInput from './CategoriesTagsInput.vue'
+import Textarea from 'primevue/textarea'
+import { CreateOrganizer, UploadOrganizerLogo } from '@/services/organizers'
 
 const categoryIds = ref<string[]>([])
 
@@ -112,20 +137,27 @@ const formSchema = toTypedSchema(
   z.object({
     title: z.string().max(256),
     location: z.string().max(256),
-    description: z.string().max(8192)
+    description: z.string().max(8192),
+    organizationName: z.string().max(256),
+    organizationDesc: z.string().max(8192)
   })
 )
 
 const backgroundImage = ref<File | null>()
 const bannerImage = ref<File | null>()
+const organizationLogoImage = ref<File | null>()
 watchEffect(() => {
   if (backgroundImage.value) backgroundImageError.value = undefined
 })
 watchEffect(() => {
   if (bannerImage.value) bannerImageError.value = undefined
 })
+watchEffect(() => {
+  if (organizationLogoImage.value) organizationLogoImageError.value = undefined
+})
 const backgroundImageError = ref<string>()
 const bannerImageError = ref<string>()
+const organizationLogoImageError = ref<string>()
 
 const { defineField, handleSubmit, errors } = useForm({
   validationSchema: formSchema
@@ -134,6 +166,8 @@ const { defineField, handleSubmit, errors } = useForm({
 const [title] = defineField('title')
 const [location] = defineField('location')
 const [description] = defineField('description')
+const [organizationName] = defineField('organizationName')
+const [organizationDesc] = defineField('organizationDesc')
 
 const onSubmit = handleSubmit(async (values) => {
   if (!backgroundImage.value) {
@@ -142,6 +176,10 @@ const onSubmit = handleSubmit(async (values) => {
   }
   if (!bannerImage.value) {
     bannerImageError.value = 'Banner image required'
+    return
+  }
+  if (!organizationLogoImage.value) {
+    organizationLogoImageError.value = 'Logo image required'
     return
   }
 
@@ -154,14 +192,22 @@ const onSubmit = handleSubmit(async (values) => {
 
   const eventId = data.value.id
 
+  const { data: organizerRes } = await CreateOrganizer({
+    organizationName: values.organizationName,
+    description: values.organizationDesc,
+    imageUrl: ''
+  })
+
+  const organizerId = organizerRes.value.organizerId
+
   await Promise.all([
+    UploadOrganizerLogo(organizerId, organizationLogoImage.value),
     UploadBackground(eventId, backgroundImage.value),
     UploadBanner(eventId, bannerImage.value)
   ])
 
   await router.push(`/organizer/create-event/${eventId}`)
 
-  console.log(1)
   toast.add({
     summary: 'Save draft successfully',
     life: 3000

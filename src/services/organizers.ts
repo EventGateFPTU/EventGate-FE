@@ -12,16 +12,6 @@ export function GetEvents(pageNumber: number, pageSize: number, searchTerm?: str
   })
 }
 
-export function GetFeaturedEvents(pageNumber: number, pageSize: number, searchTerm?: string) {
-  return axiosClient.get<Response<PaginationResponse<BaseEvent>>>('/events/featured', {
-    params: {
-      pageNumber,
-      pageSize,
-      searchTerm
-    }
-  })
-}
-
 export type GetEventByIdResponse = BaseEvent & {
   categories: BaseCategory[]
 }
@@ -41,21 +31,23 @@ export function CreateEvent(req: CreateEventRequest) {
   return axiosClient.post<Response<BaseEvent>>('/events', req)
 }
 
-type UpdateEventRequest = {
-  title: string
+type CreateOrganizerRequest = {
+  organizationName: string
   description: string
-  location: string
-  status: number
-  categoryIds: string[]
+  imageUrl: ''
 }
 
-export function UpdateEvent(eventId: string, req: UpdateEventRequest) {
-  return axiosClient.put(`/events/${eventId}`, req)
+export function CreateOrganizer(req: CreateOrganizerRequest) {
+  return axiosClient.post<
+    Response<{
+      organizerId: string
+    }>
+  >(`/organizers`, req)
 }
 
-export function UploadBackground(eventId: string, file: File) {
+export function UploadOrganizerLogo(organizerId: string, file: File) {
   return axiosClient.put(
-    `/events/${eventId}/background`,
+    `/organizers/${organizerId}/image`,
     { file },
     {
       headers: {

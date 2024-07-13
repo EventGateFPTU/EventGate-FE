@@ -30,7 +30,7 @@
       @swiper="setSwiperRef"
       style="z-index: 20"
     >
-      <SwiperSlide v-for="event in eventsRes?.events" :key="event.id">
+      <SwiperSlide v-for="event in eventsRes?.data" :key="event.id">
         <div
           class="relative space-y-4 hover:cursor-pointer"
           @click="$router.push(`/events/${event.id}`)"
@@ -60,7 +60,7 @@ import { onMounted, ref } from 'vue'
 import { usePagination } from '@/composables/usePagination'
 import { useQuery } from '@tanstack/vue-query'
 import { query } from '@/lib/axios'
-import { GetEvents } from '@/services/events'
+import { GetEvents, GetFeaturedEvents } from '@/services/events'
 
 const { eventsRes, fetchEventsSuccess } = useEvents()
 
@@ -88,8 +88,8 @@ function useEvents() {
     isSuccess: fetchEventsSuccess,
     refetch: refetchEvents
   } = useQuery({
-    queryKey: ['events', { pageNumber, pageSize }],
-    queryFn: () => query(GetEvents(pageNumber.value, pageSize.value, searchTerm.value))
+    queryKey: ['featured-events', { pageNumber, pageSize }],
+    queryFn: () => query(GetFeaturedEvents(pageNumber.value, pageSize.value, searchTerm.value))
   })
 
   return {
