@@ -71,6 +71,7 @@
 
       <div class="grid grid-cols-4 gap-8">
         <FileUploader
+          :file-url="organizer?.imageUrl"
           @update:file="organizationLogoImage = $event"
           name="organizer"
           :width="257"
@@ -126,7 +127,12 @@ import { useRouter } from 'vue-router'
 import * as z from 'zod'
 import CategoriesTagsInput from './CategoriesTagsInput.vue'
 import Textarea from 'primevue/textarea'
-import { CreateOrganizer, UploadOrganizerLogo } from '@/services/organizers'
+import { CreateOrganizer, UpdateOrganizer, UploadOrganizerLogo } from '@/services/organizers'
+import type { BaseOrganizer } from '@/types/items'
+
+const props = defineProps<{
+  organizer?: BaseOrganizer
+}>()
 
 const categoryIds = ref<string[]>([])
 
@@ -160,7 +166,11 @@ const bannerImageError = ref<string>()
 const organizationLogoImageError = ref<string>()
 
 const { defineField, handleSubmit, errors } = useForm({
-  validationSchema: formSchema
+  validationSchema: formSchema,
+  initialValues: {
+    organizationName: props.organizer?.organizationName,
+    organizationDesc: props.organizer?.description
+  }
 })
 
 const [title] = defineField('title')
@@ -178,9 +188,36 @@ const onSubmit = handleSubmit(async (values) => {
     bannerImageError.value = 'Banner image required'
     return
   }
-  if (!organizationLogoImage.value) {
-    organizationLogoImageError.value = 'Logo image required'
-    return
+
+  const promises = []
+
+  if (props.organizer == undefined) {
+    if (!organizationLogoImage.value) {
+      organizationLogoImageError.value = 'Logo image required'
+      return
+    }
+
+    const { data: organizerRes } = await CreateOrganizer({
+      organizationName: values.organizationName,
+      description: values.organizationDesc
+    })
+
+    const organizerId = organizerRes.value.organizerId
+    promises.push(UploadOrganizerLogo(organizerId, organizationLogoImage.value))
+  } else {
+    if (
+      props.organizer.organizationName != organizationName.value ||
+      props.organizer.description != organizationDesc.value
+    ) {
+      await UpdateOrganizer(props.organizer.id, {
+        organizationName: values.organizationName,
+        description: values.organizationDesc
+      })
+    }
+
+    if (organizationLogoImage.value != undefined) {
+      promises.push(UploadOrganizerLogo(props.organizer.id, organizationLogoImage.value))
+    }
   }
 
   const { data } = await CreateEvent({
@@ -192,19 +229,12 @@ const onSubmit = handleSubmit(async (values) => {
 
   const eventId = data.value.id
 
-  const { data: organizerRes } = await CreateOrganizer({
-    organizationName: values.organizationName,
-    description: values.organizationDesc,
-    imageUrl: ''
-  })
-
-  const organizerId = organizerRes.value.organizerId
-
-  await Promise.all([
-    UploadOrganizerLogo(organizerId, organizationLogoImage.value),
+  promises.push([
     UploadBackground(eventId, backgroundImage.value),
     UploadBanner(eventId, bannerImage.value)
   ])
+
+  await Promise.all(promises)
 
   await router.push(`/organizer/create-event/${eventId}`)
 

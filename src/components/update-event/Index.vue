@@ -2,14 +2,14 @@
   <Stepper :steps :initialStep @update:step="(s) => (searchParams.step = s.key)">
     <template #Info="{ nextStep }">
       <div class="pb-32">
-        <InfoStep v-if="event" :event :nextStep />
+        <InfoStep v-if="event && organizer" :event :organizer :nextStep />
       </div>
     </template>
     <template #Tickets="{ nextStep }">
       <TicketsStep v-if="event" :event :nextStep />
     </template>
     <template #Settings>
-      <div class="w-[80vw] space-y-20 rounded-3xl bg-white p-10">fdsa</div>
+      <SettingsStep v-if="event" :eventId="event.id" />
     </template>
   </Stepper>
 </template>
@@ -18,10 +18,13 @@
 import { Stepper, type Step } from '@/components/ui/stepper'
 import InfoStep from './InfoStep.vue'
 import TicketsStep from './TicketsStep.vue'
+import SettingsStep from './SettingsStep.vue'
 import { useRoute } from 'vue-router/auto'
 import { onMounted, ref } from 'vue'
 import { GetEventById, type GetEventByIdResponse } from '@/services/events'
 import { useUrlSearchParams } from '@vueuse/core'
+import { GetCurrentOrganization } from '@/services/organizers'
+import type { BaseOrganizer } from '@/types/items'
 
 const route = useRoute('/organizer/create-event/[id]')
 const searchParams = useUrlSearchParams<{
@@ -29,9 +32,16 @@ const searchParams = useUrlSearchParams<{
 }>()
 
 const event = ref<GetEventByIdResponse>()
+const organizer = ref<BaseOrganizer>()
+const done = ref(false)
 
 onMounted(() => {
   GetEventById(route.params.id).then(({ data }) => (event.value = data.value))
+  GetCurrentOrganization()
+    .then((res) => {
+      organizer.value = res.data.value
+    })
+    .finally(() => (done.value = true))
 })
 
 const steps: Step[] = [

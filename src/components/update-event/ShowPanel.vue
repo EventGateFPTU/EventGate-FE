@@ -1,17 +1,20 @@
 <template>
   <CreateTicketDialog
+    :eventId
     :isNew
     :showId="show.id.toString()"
     v-model:visible="visible"
     @submit="
       (t) => {
-        if (isNew) show.ticketTypeIds!.push(t.id)
-        else refetchTicketTypes()
+        if (isNew) {
+          ticketTypes.push(t)
+          show.ticketTypeIds!.push(t.id)
+        } else refetchTicketTypes()
         visible = false
       }
     "
   />
-  <Panel toggleable collapsed>
+  <Panel toggleable collapsed :header="header(show.startsAt, show.endsAt)">
     <template #togglericon="{ collapsed }">
       <i
         class="pi pi-angle-right transition-all duration-200"
@@ -64,6 +67,14 @@
         </div>
       </div>
 
+      <div
+        v-for="ticketType in ticketTypes"
+        :key="ticketType.id"
+        class="rounded-xl border px-8 py-6"
+      >
+        {{ ticketType.name }}
+      </div>
+
       <div class="space-y-4">
         <h2 class="text-2xl">Loại vé</h2>
         <Button
@@ -89,10 +100,13 @@ import Panel from 'primevue/panel'
 import { useConfirm } from 'primevue/useconfirm'
 import { computed, ref, unref, watchEffect, type MaybeRef } from 'vue'
 import CreateTicketDialog from './CreateTicketDialog.vue'
+import type { BaseTicketType } from '@/types/items'
+import { getHeader } from '@/utils/date'
 
 const props = defineProps<{
   show: Show
   isNew: boolean
+  eventId: string
 }>()
 
 type Show = {
@@ -101,6 +115,8 @@ type Show = {
   endsAt?: Date
   ticketTypeIds?: string[]
 }
+
+const ticketTypes = ref<BaseTicketType[]>([])
 
 const visible = ref(false)
 
@@ -164,5 +180,11 @@ function useTicketTypes(showId: MaybeRef<string>) {
     fetchTicketTypesSuccess,
     refetchTicketTypes
   }
+}
+
+function header(startsAt?: Date, endsAt?: Date) {
+  if (!startsAt || !endsAt) return ''
+
+  return getHeader(startsAt, endsAt)
 }
 </script>

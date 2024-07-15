@@ -1,10 +1,30 @@
 <template>
   <div v-if="isSuccess">
-    <DataTable :value="data?.data" lazy paginator :totalRecords="data?.count">
-      <Column field="code" header="Code"></Column>
-      <Column field="name" header="Name"></Column>
-      <Column field="category" header="Category"></Column>
-      <Column field="quantity" header="Quantity"></Column>
+    <DataTable
+      :value="data?.data"
+      :rows="10"
+      lazy
+      paginator
+      :totalRecords="data?.count"
+      groupRowsBy="showId"
+      rowGroupMode="subheader"
+      v-model:expandedRowGroups="expandedRowGroups"
+      expandableRowGroups
+    >
+      <template #groupheader="{ data }">
+        <span class="ml-2 font-bold">{{ data.showName }}</span>
+        -
+        <span>{{ getHeader(data.startsAt, data.endsAt) }}</span>
+      </template>
+
+      <Column field="showId"></Column>
+      <Column field="ticketTypeName" header="Name"></Column>
+      <Column field="price" header="Price">
+        <template #body="{ data }">
+          <span> {{ data.price }}đ </span>
+        </template>
+      </Column>
+      <Column field="amount" header="Amount"></Column>
       <template #empty>No tickets found</template>
     </DataTable>
   </div>
@@ -18,10 +38,14 @@ import { usePagination } from '@/composables/usePagination'
 import type { GetEventByIdResponse } from '@/services/events'
 import { query } from '@/lib/axios'
 import { GetEventTicketTypes } from '@/services/ticketTypes'
+import { ref } from 'vue'
+import { getHeader } from '@/utils/date'
 
 const props = defineProps<{
   event: GetEventByIdResponse
 }>()
+
+const expandedRowGroups = ref()
 
 const { pageNumber, pageSize } = usePagination()
 

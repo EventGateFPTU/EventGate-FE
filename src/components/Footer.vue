@@ -28,8 +28,13 @@
         <div>
           <h1 class="text-2xl font-bold">For organizers:</h1>
           <span>Organizers terms of use</span>
+          <Button @click="$router.push('/organizer')">Organizer page</Button>
         </div>
       </div>
     </div>
   </div>
 </template>
+
+<script setup lang="ts">
+import Button from 'primevue/button'
+</script>

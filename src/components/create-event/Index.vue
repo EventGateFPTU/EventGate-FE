@@ -1,35 +1,23 @@
 <template>
-  <!-- <Stepper :steps>
-    <template #Info> -->
   <div class="flex justify-center py-32">
-    <InfoStep />
+    <InfoStep v-if="done" :organizer />
   </div>
-  <!-- </template>
-    <template #Tickets> </template>
-    <template #Settings>
-      <div class="w-[80vw] space-y-20 rounded-3xl bg-white p-10">fdsa</div>
-    </template>
-  </Stepper> -->
 </template>
 
 <script setup lang="ts">
-import { Stepper, type Step } from '@/components/ui/stepper'
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import InfoStep from './InfoStep.vue'
+import type { BaseOrganizer } from '@/types/items'
+import { GetCurrentOrganization } from '@/services/organizers'
 
-const steps: Step[] = [
-  {
-    index: 1,
-    key: 'Info'
-  },
-  {
-    index: 2,
-    key: 'Tickets'
-  },
-  {
-    index: 3,
-    key: 'Settings'
-  }
-]
-const menu = ref(null)
+const organizer = ref<BaseOrganizer>()
+const done = ref(false)
+
+onMounted(() =>
+  GetCurrentOrganization()
+    .then((res) => {
+      organizer.value = res.data.value
+    })
+    .finally(() => (done.value = true))
+)
 </script>

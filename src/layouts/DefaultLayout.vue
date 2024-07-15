@@ -1,5 +1,5 @@
 <template>
-  <div class="relative min-h-[calc(100vh_-_8rem)]">
+  <div class="relative">
     <div class="flex h-32 items-center justify-between bg-[#BFFF50] px-24">
       <div class="w-80">
         <div v-if="isAuthenticated">
@@ -44,7 +44,7 @@
 
       <div class="flex w-80 items-center gap-8">
         <template v-if="hasUserIndicator ?? true">
-          <div>
+          <div class="hover:cursor-pointer" @click="$router.push('/my-tickets')">
             <svg
               width="57"
               height="33"
@@ -95,8 +95,15 @@
             </svg>
           </div>
           <div class="relative">
-            <InputText class="h-12 rounded-full pl-4 pr-10 drop-shadow-md" />
-            <span class="absolute inset-y-0 right-0 flex items-center justify-center px-4">
+            <InputText
+              v-model="searchTerm"
+              class="h-12 rounded-full pl-4 pr-10 drop-shadow-md"
+              @keydown.enter="search"
+            />
+            <span
+              class="absolute inset-y-0 right-0 flex items-center justify-center px-4 hover:cursor-pointer"
+              @click="search"
+            >
               <i class="pi pi-search"></i>
             </span>
           </div>
@@ -104,10 +111,10 @@
       </div>
     </div>
     <div class="relative">
-      <div class="absolute top-0 h-screen overflow-hidden">
+      <div class="absolute top-0 h-[calc(100vh_-_8rem)] overflow-hidden">
         <img fill="none" src="@/assets/background-logo.png" class="z-0 w-full" />
       </div>
-      <div class="relative z-20 h-full min-h-screen bg-[#4A3F9F]">
+      <div class="relative z-20 h-full min-h-[calc(100vh_-_8rem)] bg-[#4A3F9F]">
         <slot />
       </div>
     </div>
@@ -127,13 +134,18 @@ import Menu from 'primevue/menu'
 import OverlayPanel from 'primevue/overlaypanel'
 import Footer from '@/components/Footer.vue'
 import { ref } from 'vue'
+import { useRouter } from 'vue-router/auto'
 
 defineProps<{
   hasFooter?: boolean
   hasUserIndicator?: boolean
 }>()
 
+const router = useRouter()
+
 const { isAuthenticated, user, logout } = useAuth0()
+const searchTerm = ref()
+const search = () => router.push(`/events/search?search=${searchTerm.value}`)
 const op = ref()
 const items = ref([
   {

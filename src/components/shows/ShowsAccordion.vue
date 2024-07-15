@@ -17,19 +17,12 @@ import { useQuery } from '@tanstack/vue-query'
 import Accordion from 'primevue/accordion'
 import AccordionTab from 'primevue/accordiontab'
 import ShowTab from './ShowTab.vue'
-import dayjs from 'dayjs'
+import { getHeader } from '@/utils/date'
 const props = defineProps<{
   eventId: string
 }>()
 
 const { data, isSuccess, refetch } = useShows(props.eventId)
-
-function getHeader(startsAt: Date, endsAt: Date) {
-  const startString = dayjs(startsAt).format('HH:mm, DD [tháng] MM, YYYY')
-  const endString = dayjs(endsAt).format('HH:mm, DD [tháng] MM, YYYY')
-
-  return `${startString} - ${endString}`
-}
 
 function useShows(eventId: string) {
   const { data, isSuccess, refetch } = useQuery({

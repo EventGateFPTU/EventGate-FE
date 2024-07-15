@@ -12,6 +12,7 @@ export function GetShowTicketTypes(showId: string, pageNumber: number, pageSize:
 }
 
 type CreateTicketTypeRequest = {
+  eventId: string
   showId: string[]
   name: string
   description: string
@@ -30,10 +31,13 @@ export function CreateTicketType(req: CreateTicketTypeRequest) {
 
 type TicketTypeItem = {
   id: string
-  name: string
+  ticketTypeName: string
   showId: string
+  showName: string
   startsAt: Date
   endsAt: Date
+  price: number
+  amount: number
 }
 export function GetEventTicketTypes(eventId: string, pageNumber: number, pageSize: number) {
   return axiosClient.get<Response<PaginationResponse<TicketTypeItem>>>(

@@ -62,16 +62,30 @@
       </div>
 
       <div class="grid grid-cols-4 gap-8">
-        <FileUploader name="organizer" :width="257" :height="257" desc="Thêm banner sự kiện" />
+        <FileUploader
+          :file-url="organizer?.imageUrl"
+          name="organizer"
+          :width="257"
+          :height="257"
+          desc="Thêm banner sự kiện"
+        />
         <div class="col-span-3 space-y-2">
           <div class="flex flex-col gap-4">
             <label for="organizationName">Tên ban tổ chức</label>
-            <InputText id="organizationName" placeholder="Tên ban tổ chức" />
+            <InputText
+              v-model="organizationName"
+              id="organizationName"
+              placeholder="Tên ban tổ chức"
+            />
           </div>
 
           <div class="flex flex-col gap-4">
             <label for="organizationDesc">Thông tin ban tổ chức</label>
-            <Textarea id="organizationDesc" placeholder="Thông tin ban tổ chức" />
+            <Textarea
+              v-model="organizationDesc"
+              id="organizationDesc"
+              placeholder="Thông tin ban tổ chức"
+            />
           </div>
         </div>
       </div>
@@ -103,10 +117,13 @@ import * as z from 'zod'
 import CategoriesTagsInput from './CategoriesTagsInput.vue'
 import Textarea from 'primevue/textarea'
 import { EventStatus, eventStatusToNumber } from '@/types/enums'
+import type { BaseOrganizer } from '@/types/items'
+import { UpdateOrganizer, UploadOrganizerLogo } from '@/services/organizers'
 
 const props = defineProps<{
   event: GetEventByIdResponse
   nextStep: () => void
+  organizer: BaseOrganizer
 }>()
 
 const categoryIds = ref<string[]>([])
@@ -125,27 +142,36 @@ const formSchema = toTypedSchema(
 
 const backgroundImage = ref<File | null>()
 const bannerImage = ref<File | null>()
+const organizationLogoImage = ref<File | null>()
 watchEffect(() => {
   if (backgroundImage.value) backgroundImageError.value = undefined
 })
 watchEffect(() => {
   if (bannerImage.value) bannerImageError.value = undefined
 })
+watchEffect(() => {
+  if (organizationLogoImage.value) organizationLogoImageError.value = undefined
+})
 const backgroundImageError = ref<string>()
 const bannerImageError = ref<string>()
+const organizationLogoImageError = ref<string>()
 
 const { defineField, handleSubmit, errors } = useForm({
   validationSchema: formSchema,
   initialValues: {
     title: props.event?.title,
     description: props.event?.description,
-    location: props.event?.location
+    location: props.event?.location,
+    organizationName: props.organizer?.organizationName,
+    organizationDesc: props.organizer?.description
   }
 })
 
 const [title] = defineField('title')
 const [location] = defineField('location')
 const [description] = defineField('description')
+const [organizationName] = defineField('organizationName')
+const [organizationDesc] = defineField('organizationDesc')
 
 const onSubmit = handleSubmit(async (values) => {
   await UpdateEvent(props.event.id, {
@@ -159,6 +185,21 @@ const onSubmit = handleSubmit(async (values) => {
   const eventId = props.event.id
 
   const promises = []
+
+  if (
+    props.organizer.organizationName != organizationName.value ||
+    props.organizer.description != organizationDesc.value
+  ) {
+    await UpdateOrganizer(props.organizer.id, {
+      organizationName: values.organizationName,
+      description: values.organizationDesc
+    })
+  }
+
+  if (organizationLogoImage.value != undefined) {
+    promises.push(UploadOrganizerLogo(props.organizer.id, organizationLogoImage.value))
+  }
+
   if (backgroundImage.value) promises.push(UploadBackground(eventId, backgroundImage.value))
   if (bannerImage.value) promises.push(UploadBanner(eventId, bannerImage.value))
 

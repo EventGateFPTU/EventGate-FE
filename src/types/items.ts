@@ -38,3 +38,16 @@ export interface BaseStaff {
   fullName: string
   email: string
 }
+
+export interface BaseOrganizer {
+  id: string
+  organizationName: string
+  description: string
+  imageUrl: string
+}
+
+export interface BaseUser {
+  id: string
+  email: string
+  name: string
+}

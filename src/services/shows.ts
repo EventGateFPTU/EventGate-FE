@@ -16,6 +16,7 @@ type CreateShowRequest = {
   title: string
   startsAt: Date
   endsAt: Date
+  ticketTypeIds: string[]
 }
 
 export function CreateShow(req: CreateShowRequest) {

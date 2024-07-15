@@ -116,6 +116,7 @@ const props = defineProps<{
   visible: boolean
   showId: string
   isNew: boolean
+  eventId: string
 }>()
 
 const emit = defineEmits(['update:visible', 'submit'])
@@ -156,6 +157,7 @@ const onSubmit = handleSubmit(async (values) => {
   const showIds = []
   if (!props.isNew) showIds.push(props.showId)
   const { data } = await CreateTicketType({
+    eventId: props.eventId,
     showId: showIds,
     name: values.name,
     description: values.description,

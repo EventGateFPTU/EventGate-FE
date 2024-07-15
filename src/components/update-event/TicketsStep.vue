@@ -5,6 +5,7 @@
     <div class="space-y-4">
       <ShowPanel
         v-for="show in shows"
+        :eventId
         :isNew="false"
         :key="show.id"
         :show
@@ -14,6 +15,7 @@
 
       <ShowPanel
         v-for="(show, index) in showsToAdd"
+        :eventId
         :isNew="true"
         :key="show.id"
         :show
@@ -107,7 +109,8 @@ async function save() {
         eventId: props.event.id,
         title: 'afds',
         startsAt: showToAdd.startsAt!,
-        endsAt: showToAdd.endsAt!
+        endsAt: showToAdd.endsAt!,
+        ticketTypeIds: showToAdd.ticketTypeIds
       })
     )
   }

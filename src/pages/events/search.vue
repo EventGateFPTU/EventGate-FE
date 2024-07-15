@@ -11,6 +11,7 @@
               v-model="searchTerm"
               class="h-12 w-[40vw] pl-10 pr-10 drop-shadow-md"
               placeholder="Tên sự kiện"
+              @keydown.enter="() => refetchEvents()"
             />
             <span class="absolute flex items-center justify-center px-4">
               <i class="pi pi-search"></i>
@@ -35,13 +36,18 @@
       </div>
 
       <div class="flex justify-center">
-        <div v-if="fetchEventsSuccess" class="container grid grid-cols-5 gap-8 pt-10">
-          <Card v-for="event in eventsRes?.data" :key="event.id">
+        <div v-if="fetchEventsSuccess" class="container grid grid-cols-4 gap-8 pt-10">
+          <Card
+            v-for="event in eventsRes?.data"
+            :key="event.id"
+            class="h-full max-h-[400px] hover:cursor-pointer"
+            @click="$router.push(`/events/${event.id}`)"
+          >
             <template #header>
               <img alt="user header" src="@/assets/test-background.png" class="rounded-t-xl" />
             </template>
             <template #title>{{ event.title }}</template>
-            <template #content> price related thing here </template>
+            <template #content> </template>
             <!-- <template #footer>
               <div class="mt-1 flex gap-3">
                 <Button label="Cancel" severity="secondary" outlined class="w-full" />
@@ -65,21 +71,25 @@ import Button from 'primevue/button'
 import Calendar from 'primevue/calendar'
 import Card from 'primevue/card'
 import InputText from 'primevue/inputtext'
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
+import { useRoute } from 'vue-router/auto'
+import { useUrlSearchParams } from '@vueuse/core'
 
-const props = defineProps<{
-  searchTerm?: string
-}>()
+const route = useRoute('/events/search')
 
 const { eventsRes, fetchEventsSuccess, refetchEvents, searchTerm, categoryIds, date, location } =
-  useSearchEvents(props.searchTerm)
+  useSearchEvents()
 
-function useSearchEvents(search?: string) {
+function useSearchEvents() {
   const { pageNumber, pageSize } = usePagination(1, 5)
-  const searchTerm = ref<string>(search ?? '')
+  // const searchTerm = ref<string>(search ?? '')
+  const urlSearchParams = useUrlSearchParams()
+  const searchTerm = ref<string>(urlSearchParams.search as string)
   const location = ref<string>()
   const date = ref<Date>()
   const categoryIds = ref<string[]>([])
+
+  watch(searchTerm, (val) => (urlSearchParams.search = val))
 
   const {
     data: eventsRes,

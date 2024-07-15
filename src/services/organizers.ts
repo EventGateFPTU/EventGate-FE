@@ -1,48 +1,22 @@
-import type { BaseCategory, BaseEvent } from '@/types/items'
-import type { PaginationResponse, Response } from '@/types/results'
+import type { BaseEvent, BaseOrganizer } from '@/types/items'
+import type { Response } from '@/types/results'
 import axiosClient from './axios'
 
-export function GetEvents(pageNumber: number, pageSize: number, searchTerm?: string) {
-  return axiosClient.get<Response<PaginationResponse<BaseEvent>>>('/events', {
-    params: {
-      pageNumber,
-      pageSize,
-      searchTerm
-    }
-  })
-}
-
-export type GetEventByIdResponse = BaseEvent & {
-  categories: BaseCategory[]
-}
-
-export function GetEventById(eventId: string) {
-  return axiosClient.get<Response<GetEventByIdResponse>>(`/events/${eventId}`, {})
-}
-
-type CreateEventRequest = {
-  title: string
-  description: string
-  location: string
-  categoryIds: string[]
-}
-
-export function CreateEvent(req: CreateEventRequest) {
-  return axiosClient.post<Response<BaseEvent>>('/events', req)
-}
-
-type CreateOrganizerRequest = {
+type CreateOrUpdateOrganizerRequest = {
   organizationName: string
   description: string
-  imageUrl: ''
 }
 
-export function CreateOrganizer(req: CreateOrganizerRequest) {
+export function CreateOrganizer(req: CreateOrUpdateOrganizerRequest) {
   return axiosClient.post<
     Response<{
       organizerId: string
     }>
   >(`/organizers`, req)
+}
+
+export function UpdateOrganizer(organizerId: string, req: CreateOrUpdateOrganizerRequest) {
+  return axiosClient.put<Response<BaseOrganizer>>(`/organizers/${organizerId}`, req)
 }
 
 export function UploadOrganizerLogo(organizerId: string, file: File) {
@@ -57,14 +31,10 @@ export function UploadOrganizerLogo(organizerId: string, file: File) {
   )
 }
 
-export function UploadBanner(eventId: string, file: File) {
-  return axiosClient.put(
-    `/events/${eventId}/banner`,
-    { file },
-    {
-      headers: {
-        'Content-Type': 'multipart/form-data'
-      }
-    }
-  )
+export function GetOrganizerEvents() {
+  return axiosClient.get<Response<BaseEvent[]>>(`/organizers/events`)
+}
+
+export function GetCurrentOrganization() {
+  return axiosClient.get<Response<BaseOrganizer>>(`/organizers/organization`)
 }
