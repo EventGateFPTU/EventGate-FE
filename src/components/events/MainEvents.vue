@@ -28,7 +28,7 @@
     spaceBetween="0"
     @swiper="setSwiperRef"
   >
-    <SwiperSlide v-for="event in eventsRes?.events" :key="event.id" v-slot="{ isActive, isNext }">
+    <SwiperSlide v-for="event in eventsRes?.data" :key="event.id" v-slot="{ isActive, isNext }">
       <div
         class="relative transition-all duration-500"
         :class="{

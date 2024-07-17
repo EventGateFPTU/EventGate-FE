@@ -30,7 +30,7 @@
         <CommandList v-if="fetchCategoriesSuccess">
           <CommandGroup>
             <CommandItem
-              v-for="category in categoriesRes!.categories"
+              v-for="category in categoriesRes!.data"
               :key="category.id"
               :value="category"
               @select="select(category)"
@@ -67,13 +67,13 @@ import { usePagination } from '@/composables/usePagination'
 import { query } from '@/lib/axios'
 import { cn } from '@/lib/utils'
 import { CreateCategory, GetCategories } from '@/services/categories'
+import type { BaseCategory } from '@/types/items'
 import { useQuery } from '@tanstack/vue-query'
-import { useDebounceFn, useVModel } from '@vueuse/core'
+import { useDebounceFn } from '@vueuse/core'
 import { Check, X } from 'lucide-vue-next'
-import { computed, ref, watch, watchEffect } from 'vue'
+import { ref, watchEffect } from 'vue'
 import { Badge } from '../ui/badge'
 import Input from '../ui/input/Input.vue'
-import type { BaseCategory } from '@/types/items'
 
 const props = defineProps<{
   categoryIds: string[]

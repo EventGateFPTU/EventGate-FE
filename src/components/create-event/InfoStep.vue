@@ -70,16 +70,40 @@
       </div>
 
       <div class="grid grid-cols-4 gap-8">
-        <FileUploader name="organizer" :width="257" :height="257" desc="Thêm banner sự kiện" />
+        <FileUploader
+          :file-url="organizer?.imageUrl"
+          @update:file="organizationLogoImage = $event"
+          name="organizer"
+          :width="257"
+          :height="257"
+          desc="Thêm banner sự kiện"
+        />
         <div class="col-span-3 space-y-2">
           <div class="flex flex-col gap-4">
             <label for="organizationName">Tên ban tổ chức</label>
-            <InputText id="organizationName" placeholder="Tên ban tổ chức" />
+            <InputText
+              v-model="organizationName"
+              id="organizationName"
+              placeholder="Tên ban tổ chức"
+              :class="{ 'p-invalid': errors.organizationName }"
+            />
+            <small id="organizationName-help" class="p-error">
+              {{ errors.organizationName }}
+            </small>
           </div>
 
           <div class="flex flex-col gap-4">
             <label for="organizationDesc">Thông tin ban tổ chức</label>
-            <InputText id="organizationDesc" placeholder="Thông tin ban tổ chức" />
+            <Textarea
+              v-model="organizationDesc"
+              id="organizationDesc"
+              placeholder="Thông tin ban tổ chức"
+              class="h-[10rem] flex-grow"
+              :class="{ 'p-invalid': errors.organizationDesc }"
+            />
+            <small id="organizationDesc-help" class="p-error">
+              {{ errors.organizationDesc }}
+            </small>
           </div>
         </div>
       </div>
@@ -102,6 +126,13 @@ import { ref, watchEffect } from 'vue'
 import { useRouter } from 'vue-router'
 import * as z from 'zod'
 import CategoriesTagsInput from './CategoriesTagsInput.vue'
+import Textarea from 'primevue/textarea'
+import { CreateOrganizer, UpdateOrganizer, UploadOrganizerLogo } from '@/services/organizers'
+import type { BaseOrganizer } from '@/types/items'
+
+const props = defineProps<{
+  organizer?: BaseOrganizer
+}>()
 
 const categoryIds = ref<string[]>([])
 
@@ -112,28 +143,41 @@ const formSchema = toTypedSchema(
   z.object({
     title: z.string().max(256),
     location: z.string().max(256),
-    description: z.string().max(8192)
+    description: z.string().max(8192),
+    organizationName: z.string().max(256),
+    organizationDesc: z.string().max(8192)
   })
 )
 
 const backgroundImage = ref<File | null>()
 const bannerImage = ref<File | null>()
+const organizationLogoImage = ref<File | null>()
 watchEffect(() => {
   if (backgroundImage.value) backgroundImageError.value = undefined
 })
 watchEffect(() => {
   if (bannerImage.value) bannerImageError.value = undefined
 })
+watchEffect(() => {
+  if (organizationLogoImage.value) organizationLogoImageError.value = undefined
+})
 const backgroundImageError = ref<string>()
 const bannerImageError = ref<string>()
+const organizationLogoImageError = ref<string>()
 
 const { defineField, handleSubmit, errors } = useForm({
-  validationSchema: formSchema
+  validationSchema: formSchema,
+  initialValues: {
+    organizationName: props.organizer?.organizationName,
+    organizationDesc: props.organizer?.description
+  }
 })
 
 const [title] = defineField('title')
 const [location] = defineField('location')
 const [description] = defineField('description')
+const [organizationName] = defineField('organizationName')
+const [organizationDesc] = defineField('organizationDesc')
 
 const onSubmit = handleSubmit(async (values) => {
   if (!backgroundImage.value) {
@@ -145,6 +189,37 @@ const onSubmit = handleSubmit(async (values) => {
     return
   }
 
+  const promises = []
+
+  if (props.organizer == undefined) {
+    if (!organizationLogoImage.value) {
+      organizationLogoImageError.value = 'Logo image required'
+      return
+    }
+
+    const { data: organizerRes } = await CreateOrganizer({
+      organizationName: values.organizationName,
+      description: values.organizationDesc
+    })
+
+    const organizerId = organizerRes.value.organizerId
+    promises.push(UploadOrganizerLogo(organizerId, organizationLogoImage.value))
+  } else {
+    if (
+      props.organizer.organizationName != organizationName.value ||
+      props.organizer.description != organizationDesc.value
+    ) {
+      await UpdateOrganizer(props.organizer.id, {
+        organizationName: values.organizationName,
+        description: values.organizationDesc
+      })
+    }
+
+    if (organizationLogoImage.value != undefined) {
+      promises.push(UploadOrganizerLogo(props.organizer.id, organizationLogoImage.value))
+    }
+  }
+
   const { data } = await CreateEvent({
     title: values.title,
     description: values.description,
@@ -154,14 +229,15 @@ const onSubmit = handleSubmit(async (values) => {
 
   const eventId = data.value.id
 
-  await Promise.all([
+  promises.push([
     UploadBackground(eventId, backgroundImage.value),
     UploadBanner(eventId, bannerImage.value)
   ])
 
+  await Promise.all(promises)
+
   await router.push(`/organizer/create-event/${eventId}`)
 
-  console.log(1)
   toast.add({
     summary: 'Save draft successfully',
     life: 3000

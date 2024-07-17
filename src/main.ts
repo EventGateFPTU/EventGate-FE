@@ -15,11 +15,13 @@ import { VueQueryPlugin } from '@tanstack/vue-query'
 import { createAuth0 } from '@auth0/auth0-vue'
 import DialogService from 'primevue/dialogservice'
 import ToastService from 'primevue/toastservice'
+import ConfirmationService from 'primevue/confirmationservice'
 
 const app = createApp(App)
 
 app.use(PrimeVue)
 app.use(DialogService)
+app.use(ConfirmationService)
 app.use(ToastService)
 app.use(createPinia())
 app.use(router)

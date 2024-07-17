@@ -1,16 +1,9 @@
-import type { EventStatus } from '@/types/enums'
 import type { BaseCategory, BaseEvent } from '@/types/items'
-import type { PaginationValue, Response } from '@/types/results'
+import type { PaginationResponse, Response } from '@/types/results'
 import axiosClient from './axios'
 
 export function GetEvents(pageNumber: number, pageSize: number, searchTerm?: string) {
-  return axiosClient.get<
-    Response<
-      PaginationValue & {
-        events: BaseEvent[]
-      }
-    >
-  >('/events', {
+  return axiosClient.get<Response<PaginationResponse<BaseEvent>>>('/events', {
     params: {
       pageNumber,
       pageSize,
@@ -19,8 +12,38 @@ export function GetEvents(pageNumber: number, pageSize: number, searchTerm?: str
   })
 }
 
+export function GetFeaturedEvents(pageNumber: number, pageSize: number, searchTerm?: string) {
+  return axiosClient.get<Response<PaginationResponse<BaseEvent>>>('/events/featured', {
+    params: {
+      pageNumber,
+      pageSize,
+      searchTerm
+    }
+  })
+}
+
+export function SearchEvents(
+  pageNumber: number,
+  pageSize: number,
+  categoryIds: string[],
+  searchTerm?: string,
+  location?: string,
+  date?: Date
+) {
+  return axiosClient.post<Response<PaginationResponse<BaseEvent>>>('/events/search', {
+    pageNumber,
+    pageSize,
+    searchTerm,
+    location,
+    date,
+    categoryIds: categoryIds ?? []
+  })
+}
+
 export type GetEventByIdResponse = BaseEvent & {
   categories: BaseCategory[]
+  organizerImageUrl: string
+  organizerDescription: string
 }
 
 export function GetEventById(eventId: string) {
@@ -42,7 +65,7 @@ type UpdateEventRequest = {
   title: string
   description: string
   location: string
-  status: EventStatus
+  status: number
   categoryIds: string[]
 }
 
