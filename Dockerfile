@@ -6,11 +6,13 @@ ARG FE_DOMAIN
 ARG AUDIENCE
 ARG CLIENT_ID
 ARG AUTH0_DOMAIN
+ARG API_URL
 
 ENV VITE_AUTH0_DOMAIN=${AUTH0_DOMAIN:-dev-1mjbz4bksk6s33g6.us.auth0.com}
 ENV VITE_AUTH0_CLIENT_ID=${CLIENT_ID:-Vt3DrYkfhFVSneuIZX3l7Cl6ZkQCw9V8}
-ENV VITE_AUTH0_CALLBACK_URL=${FE_DOMAIN:-http://localhost:5173/}callback
+ENV VITE_AUTH0_CALLBACK_URL=${FE_DOMAIN:-http://localhost:5173}/callback
 ENV VITE_AUTH0_AUDIENCE=${AUDIENCE:-https://wowtogo.org}
+ENV VITE_API_URL=${API_URL:-http://localhost:5001}
 
 COPY package*.json ./
 RUN npm i npm-run-all --save-dev
