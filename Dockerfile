@@ -13,7 +13,8 @@ ENV VITE_AUTH0_CALLBACK_URL=${FE_DOMAIN:-http://localhost:5173/}callback
 ENV VITE_AUTH0_AUDIENCE=${AUDIENCE:-https://wowtogo.org}
 
 COPY package*.json ./
-RUN npm install --package-lock-only
+RUN npm i npm-run-all --save-dev
+RUN npm i --package-lock-only
 
 COPY . .
 
