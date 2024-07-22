@@ -23,11 +23,7 @@ export function UploadOrganizerLogo(organizerId: string, file: File) {
   return axiosClient.put(
     `/organizers/${organizerId}/image`,
     { file },
-    {
-      headers: {
-        'Content-Type': 'multipart/form-data'
-      }
-    }
+    { headers: { 'Content-Type': 'multipart/form-data' } }
   )
 }
 

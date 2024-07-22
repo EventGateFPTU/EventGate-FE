@@ -1,6 +1,6 @@
 <template>
   <div class="relative">
-    <div class="flex h-32 items-center justify-between bg-[#BFFF50] px-24">
+    <div id="nav" class="flex h-32 items-center justify-between bg-[#BFFF50] px-24">
       <div class="w-80">
         <div v-if="isAuthenticated">
           <Avatar
@@ -155,14 +155,19 @@ const items = ref([
     label: 'Profile',
     items: [
       {
+        label: 'Go to Organizer page',
+        icon: 'pi pi-user',
+        command: () => router.push('/organizer')
+      },
+      {
+        label: 'Go to Staff page',
+        icon: 'pi pi-users',
+        command: () => router.push('/staff')
+      },
+      {
         label: 'Settings',
         icon: 'pi pi-cog'
       },
-      // {
-      //   label: 'Messages',
-      //   icon: 'pi pi-inbox',
-      //   badge: 2
-      // },
       {
         label: 'Logout',
         icon: 'pi pi-sign-out',
@@ -182,3 +187,9 @@ const toggle = (event: any) => {
   op.value.toggle(event)
 }
 </script>
+
+<style scoped>
+/* #nav {
+  background: linear-gradient(0deg, rgba(2, 0, 36, 0) 0%, #bfff50 100%);
+} */
+</style>
