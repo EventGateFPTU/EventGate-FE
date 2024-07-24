@@ -38,9 +38,14 @@ import { onMounted, ref } from 'vue'
 import type { BaseEvent } from '@/types/items'
 import DataTable from 'primevue/datatable'
 import Column from 'primevue/column'
-import { GetOrganizerEvents } from '@/services/organizers'
+import { GetStaffEvents } from '@/services/events'
+import { usePagination } from '@/composables/usePagination'
+import { query } from '@/lib/axios'
 
 const events = ref<BaseEvent[]>([])
 
-onMounted(() => GetOrganizerEvents().then((res) => (events.value = res.data.value)))
+const { pageNumber, pageSize } = usePagination()
+onMounted(() =>
+  query(GetStaffEvents(pageNumber.value, pageSize.value)).then((res) => (events.value = res.data))
+)
 </script>

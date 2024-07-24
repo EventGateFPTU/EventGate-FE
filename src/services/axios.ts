@@ -10,8 +10,9 @@ const authStore = useAuthStore()
 axiosClient.defaults.baseURL = import.meta.env.VITE_API_URL
 axiosClient.interceptors.request.use(
   async (config) => {
-    if (!authStore.token) await authStore.getToken()
-    config.headers.setAuthorization(`Bearer ${authStore.token}`)
+    if (authStore.token) {
+      config.headers.setAuthorization(`Bearer ${authStore.token}`)
+    }
     return config
   },
   (error) => Promise.reject(error)
@@ -22,12 +23,14 @@ axiosClient.interceptors.response.use(
   (error) => {
     const originalRequest = error.config
 
-    if (error?.response?.status === 401 && !originalRequest._retry) {
-      originalRequest._retry = true
+    if (error?.response?.status === 401) {
       return authStore.getToken().then(() => {
         return axiosClient(originalRequest)
       })
     }
+
+    const code = error?.response?.status
+    if (code >= 400 && code < 500 && code !== 401) return error.response
 
     return Promise.reject(error)
   }

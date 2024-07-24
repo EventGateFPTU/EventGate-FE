@@ -96,3 +96,9 @@ export function UploadBanner(eventId: string, file: File) {
     }
   )
 }
+
+export function GetStaffEvents(pageNumber: number, pageSize: number) {
+  return axiosClient.get<Response<PaginationResponse<BaseEvent>>>('/staff/events', {
+    params: { pageNumber, pageSize }
+  })
+}
