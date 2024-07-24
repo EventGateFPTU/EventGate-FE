@@ -16,7 +16,9 @@
       <div class="container my-20 w-full flex-1">
         <div class="min-h-[50%] rounded-xl bg-white p-4">
           <Tabs :model-value="tab ?? 'orders'" v-if="event">
-            <TabsContent value="tickets"> <Tickets :event /> </TabsContent>
+            <TabsContent value="tickets">
+              <Tickets :event />
+            </TabsContent>
           </Tabs>
         </div>
       </div>
@@ -25,7 +27,8 @@
 </template>
 
 <script setup lang="ts">
-import { Tickets } from '@/components/tickets'
+import Button from 'primevue/button'
+import { Tickets } from '@/components/staffTickets'
 import { Tabs, TabsContent } from '@/components/ui/tabs'
 import DefaultLayout from '@/layouts/DefaultLayout.vue'
 import { GetEventById, type GetEventByIdResponse } from '@/services/events'
