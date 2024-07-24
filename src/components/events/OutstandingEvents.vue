@@ -37,6 +37,13 @@
         >
           <div class="flex justify-center transition-all duration-500">
             <img
+              v-if="event.bannerImageUrl"
+              :src="event.bannerImageUrl"
+              :alt="event.title"
+              class="border-round rounded-3xl"
+            />
+            <img
+              v-else
               src="@/assets/test-banner.png"
               :alt="event.title"
               class="border-round rounded-3xl"

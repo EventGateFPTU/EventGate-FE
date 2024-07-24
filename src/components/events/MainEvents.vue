@@ -38,6 +38,13 @@
         }"
       >
         <img
+          v-if="event.backgroundImageUrl"
+          :src="event.backgroundImageUrl"
+          :alt="event.title"
+          class="border-round w-[1000px] rounded-3xl"
+        />
+        <img
+          v-else
           src="@/assets/test-background.png"
           :alt="event.title"
           class="border-round w-[1000px] rounded-3xl"
