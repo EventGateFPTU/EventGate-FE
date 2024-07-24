@@ -15,5 +15,5 @@ export function CreateOrder(req: CreateOrderRequest) {
 }
 
 export function ConfirmPaid(orderId: string) {
-  return axiosClient.put<Response<unknown>>(`/orders/${orderId}`)
+  return axiosClient.put<Response<unknown>>(`/orders/confirm-paid/${orderId}`)
 }
