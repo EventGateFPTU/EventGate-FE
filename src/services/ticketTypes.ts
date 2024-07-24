@@ -2,6 +2,9 @@ import type { BaseTicketType } from '@/types/items'
 import type { PaginationResponse, Response } from '@/types/results'
 import axiosClient from './axios'
 
+export function GetTicketTypeById(ticketTypeId: string) {
+  return axiosClient.get<Response<BaseTicketType>>(`/ticket-types/${ticketTypeId}`)
+}
 export function GetShowTicketTypes(showId: string, pageNumber: number, pageSize: number) {
   return axiosClient.get<Response<PaginationResponse<BaseTicketType>>>(`/shows/${showId}/tickets`, {
     params: {

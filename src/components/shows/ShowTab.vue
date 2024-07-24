@@ -10,7 +10,7 @@
       </div>
       <div class="flex items-end gap-4">
         <p class="font-semibold">{{ ticketType.price }}đ</p>
-        <Button size="small">Buy now</Button>
+        <Button size="small" @click="() => buyTicket(ticketType)">Buy now</Button>
       </div>
     </div>
     <div v-if="!data?.data.length">No ticket types</div>
@@ -22,10 +22,18 @@ import Button from 'primevue/button'
 import { query } from '@/lib/axios'
 import { GetShowTicketTypes } from '@/services/ticketTypes'
 import { useQuery } from '@tanstack/vue-query'
+import useGlobalStore from '@/stores/useGlobalStore'
+import type { BaseEvent, BaseTicketType } from '@/types/items'
+import { useRouter } from 'vue-router'
+import type { GetEventByIdResponse } from '@/services/events'
 
 const props = defineProps<{
   showId: string
+  event: GetEventByIdResponse
 }>()
+
+const router = useRouter()
+const globalStore = useGlobalStore()
 
 const { data, isSuccess, refetch } = useShowTicketTypes(props.showId)
 
@@ -36,5 +44,11 @@ function useShowTicketTypes(showId: string) {
   })
 
   return { data, isSuccess, refetch }
+}
+
+function buyTicket(ticketType: BaseTicketType) {
+  globalStore.ticketType = ticketType
+  globalStore.event = props.event
+  router.push(`/events/${props.event.id}/buy-ticket/${ticketType.id}`)
 }
 </script>

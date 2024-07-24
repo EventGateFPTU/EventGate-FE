@@ -29,6 +29,10 @@ export function AssignStaff(userId: string, showId: string) {
   })
 }
 
+export function UnassignStaff(userId: string, showId: string) {
+  return axiosClient.post('/staff/unassign', { userId, showId })
+}
+
 export function AddStaff(eventId: string, userId: string) {
   return axiosClient.post<Response<null>>(`/events/${eventId}/staff/${userId}`)
 }

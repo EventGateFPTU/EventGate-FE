@@ -38,7 +38,7 @@
             <div class="flex h-16 items-center p-4 text-xl">
               <p class="font-semibold">Thông tin vé</p>
             </div>
-            <ShowsAccordion :eventId="event.id" />
+            <ShowsAccordion :event />
           </div>
         </div>
       </div>
@@ -53,7 +53,7 @@ import { GetEventById, type GetEventByIdResponse } from '@/services/events'
 import { onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
 
-const route = useRoute('/events/[id]')
+const route = useRoute('/events/[id]/')
 
 const event = ref<GetEventByIdResponse>()
 

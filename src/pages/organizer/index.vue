@@ -1,7 +1,7 @@
 <template>
   <DefaultLayout>
     <div class="flex justify-center">
-      <div class="container mt-20 h-[50vh] rounded-xl bg-white pt-8">
+      <div class="container my-20 min-h-[50vh] rounded-xl bg-white pt-8">
         <TabView>
           <TabPanel header="Events">
             <div class="flex justify-end">
