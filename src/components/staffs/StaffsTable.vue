@@ -37,7 +37,7 @@
     </div>
     <div v-if="fetchStaffsSuccess" class="space-y-4 pb-4">
       <DataTable :value="staffs?.data">
-        <Column field="fullName" header="Name"></Column>
+        <Column field="fullname" header="Name"></Column>
         <Column field="email" header="Email"></Column>
         <template #empty>No staffs</template>
       </DataTable>

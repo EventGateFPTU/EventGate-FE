@@ -20,7 +20,8 @@ declare module 'vue-router/auto-routes' {
   export interface RouteNamedMap {
     '/': RouteRecordInfo<'/', '/', Record<never, never>, Record<never, never>>,
     '/create-event': RouteRecordInfo<'/create-event', '/create-event', Record<never, never>, Record<never, never>>,
-    '/events/[id]': RouteRecordInfo<'/events/[id]', '/events/:id', { id: ParamValue<true> }, { id: ParamValue<false> }>,
+    '/events/[id]/': RouteRecordInfo<'/events/[id]/', '/events/:id', { id: ParamValue<true> }, { id: ParamValue<false> }>,
+    '/events/[id]/buy-ticket/[ticketId]': RouteRecordInfo<'/events/[id]/buy-ticket/[ticketId]', '/events/:id/buy-ticket/:ticketId', { id: ParamValue<true>, ticketId: ParamValue<true> }, { id: ParamValue<false>, ticketId: ParamValue<false> }>,
     '/events/search': RouteRecordInfo<'/events/search', '/events/search', Record<never, never>, Record<never, never>>,
     '/my-tickets': RouteRecordInfo<'/my-tickets', '/my-tickets', Record<never, never>, Record<never, never>>,
     '/organizer/': RouteRecordInfo<'/organizer/', '/organizer', Record<never, never>, Record<never, never>>,

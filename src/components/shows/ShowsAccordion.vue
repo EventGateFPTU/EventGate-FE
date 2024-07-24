@@ -5,7 +5,7 @@
       :key="show.id"
       :header="getHeader(show.startsAt, show.endsAt)"
     >
-      <ShowTab :showId="show.id" />
+      <ShowTab :showId="show.id" :event />
     </AccordionTab>
   </Accordion>
 </template>
@@ -18,11 +18,13 @@ import Accordion from 'primevue/accordion'
 import AccordionTab from 'primevue/accordiontab'
 import ShowTab from './ShowTab.vue'
 import { getHeader } from '@/utils/date'
+import type { BaseEvent } from '@/types/items'
+import type { GetEventByIdResponse } from '@/services/events'
 const props = defineProps<{
-  eventId: string
+  event: GetEventByIdResponse
 }>()
 
-const { data, isSuccess, refetch } = useShows(props.eventId)
+const { data, isSuccess, refetch } = useShows(props.event.id)
 
 function useShows(eventId: string) {
   const { data, isSuccess, refetch } = useQuery({
