@@ -2,7 +2,9 @@
   <DefaultLayout>
     <div class="flex justify-center pt-20">
       <div class="container">
-        <h1 class="pb-4 text-3xl font-bold text-white">Check in</h1>
+        <h1 class="pb-4 text-3xl font-bold text-white">
+          Check in for show "{{ show?.showTitle }}"
+        </h1>
         <div class="grid grid-cols-2 gap-4">
           <div class="gap-4 rounded-xl bg-white p-4">
             <h2 class="text-2xl font-semibold">Ticket information</h2>
@@ -86,12 +88,14 @@ import Button from 'primevue/button'
 import InputText from 'primevue/inputtext'
 import DefaultLayout from '@/layouts/DefaultLayout.vue'
 import Calendar from 'primevue/calendar'
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { QrcodeStream } from 'vue-qrcode-reader'
 import { useRoute } from 'vue-router'
 import { Checkin, GetCheckinInfo, type AttendeeInfo } from '@/services/staffs'
 import dayjs from 'dayjs'
 import { useToast } from 'primevue/usetoast'
+import type { BaseShow } from '@/types/items'
+import { GetShowById, type GetShowByIdResponse } from '@/services/shows'
 
 const route = useRoute('/show/[id]/checkin')
 
@@ -111,10 +115,15 @@ type DetectedCode = {
   }
 }
 
+const show = ref<GetShowByIdResponse>()
 const attendee = ref<AttendeeInfo>()
 const code = ref<string>()
 const toast = useToast()
 const format = ref<string>()
+
+onMounted(() => {
+  GetShowById(route.params.id).then(({ data }) => (show.value = data.value))
+})
 
 function onDetect(detectedCodes: DetectedCode[]) {
   code.value = detectedCodes[0].rawValue

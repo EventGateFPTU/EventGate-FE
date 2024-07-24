@@ -11,6 +11,15 @@ export function GetEventShows(eventId: string, pageNumber: number, pageSize: num
   })
 }
 
+export type GetShowByIdResponse = BaseShow & {
+  showTitle: string
+  eventTitle: string
+}
+
+export function GetShowById(showId: string) {
+  return axiosClient.get<Response<GetShowByIdResponse>>(`/shows/${showId}`)
+}
+
 type CreateShowRequest = {
   eventId: string
   title: string
