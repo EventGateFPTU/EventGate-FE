@@ -30,8 +30,8 @@ jobs:
         context: .
         push: true
         tags: profileorg/wowtogo-fe-dev
-        build-args:
-          - API_URL=${{ env.BACKEND_URL }}
-          - FE_DOMAIN=${{ env.FRONTEND_URL }}
+        build-args: |
+          API_URL=${{ env.BACKEND_URL }}
+          FE_DOMAIN=${{ env.FRONTEND_URL }}
 
       if: github.event_name == 'push'
