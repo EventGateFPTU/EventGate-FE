@@ -6,10 +6,9 @@
     v-model:visible="visible"
     @submit="
       (t) => {
-        if (isNew) {
-          ticketTypes.push(t)
-          show.ticketTypeIds!.push(t.id)
-        } else refetchTicketTypes()
+        refetchTicketTypes()
+        ticketTypes.push(t)
+        show.ticketTypeIds!.push(t.id)
         visible = false
       }
     "
@@ -120,7 +119,7 @@ const ticketTypes = ref<BaseTicketType[]>([])
 
 const visible = ref(false)
 
-const emit = defineEmits(['remove:show', 'hasError'])
+const emit = defineEmits(['remove:show', 'hasError', 'add:show'])
 
 const confirm = useConfirm()
 

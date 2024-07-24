@@ -2,8 +2,8 @@
   <DefaultLayout>
     <div class="flex justify-center pt-20">
       <div class="container">
-        <h1 class="pb-4 text-3xl font-bold text-white">
-          Check in for show "{{ show?.showTitle }}"
+        <h1 class="pb-4 text-3xl font-bold text-white" v-if="show">
+          Check in for event "{{ show.eventTitle }}"
         </h1>
         <div class="grid grid-cols-2 gap-4">
           <div class="gap-4 rounded-xl bg-white p-4">
@@ -84,6 +84,7 @@
 </template>
 
 <script setup lang="ts">
+import { getHeader } from '@/utils/date'
 import Button from 'primevue/button'
 import InputText from 'primevue/inputtext'
 import DefaultLayout from '@/layouts/DefaultLayout.vue'

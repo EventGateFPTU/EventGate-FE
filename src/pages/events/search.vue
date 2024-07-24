@@ -1,6 +1,6 @@
 <template>
   <DefaultLayout :has-footer="false" :has-user-indicator="false">
-    <div>
+    <div class="pb-20">
       <div class="relative">
         <img src="@/assets/search-background.png" alt="" class="w-full" />
         <div

@@ -67,13 +67,16 @@ import DataTable from 'primevue/datatable'
 import Dialog from 'primevue/dialog'
 import Panel from 'primevue/panel'
 import { useToast } from 'primevue/usetoast'
-import { ref } from 'vue'
+import { computed, ref, toRefs } from 'vue'
 import { useConfirm } from 'primevue/useconfirm'
 
 const props = defineProps<{
   eventId: string
   show: BaseShow
 }>()
+
+const { show } = toRefs(props)
+const showId = computed(() => show.value.id)
 
 const confirm = useConfirm()
 const toast = useToast()
@@ -90,7 +93,7 @@ const {
   isSuccess: fetchShowStaffsSuccess,
   refetch
 } = useQuery({
-  queryKey: ['show-staffs'],
+  queryKey: ['show-staffs', { showId }],
   queryFn: () => query(GetShowStaffs(props.show.id))
 })
 
