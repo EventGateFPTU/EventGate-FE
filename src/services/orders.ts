@@ -4,14 +4,16 @@ import axiosClient from './axios'
 
 type CreateOrderRequest = {
   ticketTypeId: string
-  currency: string
+  email: string
+  firstName: string
+  lastName: string
   phoneNumber: string
   dateOfBirth: Date
 }
 export function CreateOrder(req: CreateOrderRequest) {
-  return axiosClient.post<Response<unknown>>('/categories', req)
+  return axiosClient.post<Response<{ id: string }>>('/orders', req)
 }
 
-export function CreateCategory(name: string) {
-  return axiosClient.post<Response<BaseCategory>>('/categories', { name })
+export function ConfirmPaid(orderId: string) {
+  return axiosClient.put<Response<unknown>>(`/orders/confirm-paid/${orderId}`)
 }

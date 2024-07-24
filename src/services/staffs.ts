@@ -36,3 +36,25 @@ export function UnassignStaff(userId: string, showId: string) {
 export function AddStaff(eventId: string, userId: string) {
   return axiosClient.post<Response<null>>(`/events/${eventId}/staff/${userId}`)
 }
+
+export type AttendeeInfo = {
+  id: string
+  firstName: string
+  lastName: string
+  phoneNumber: string
+  email: string
+  dateOfBirth: Date
+  ticketId: string
+  canCheckin: boolean
+}
+export function GetCheckinInfo(showId: string, code: string) {
+  return axiosClient.post<Response<AttendeeInfo>>('/staff/checkin-info', { showId, code })
+}
+
+export function Checkin(showId: string, ticketId: string, usedInFormat: string) {
+  return axiosClient.put<Response<AttendeeInfo>>('/staff/checkin', {
+    showId,
+    ticketId,
+    usedInFormat
+  })
+}
