@@ -43,8 +43,10 @@ jobs:
       uses: appleboy/ssh-action@v0.1.3
       with:
         host: ${{ secrets.VPS_HOST }}
-        username: ${{ secrets.VPS_USER }}
-        password: ${{ secrets.VPS_PASSWORD }}
+        # username: ${{ secrets.VPS_USER }}
+        # password: ${{ secrets.VPS_PASSWORD }}
+        username: nhatsang
+        password: 290503sang
         script: |
           docker pull profileorg/wowtogo-fe-dev:latest
           docker stop wowtogo-container || true
