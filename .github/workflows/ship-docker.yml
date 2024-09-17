@@ -41,7 +41,7 @@ jobs:
 
     steps:
     - name: SSH to VPS and deploy Docker container
-      uses: appleboy/ssh-action@v1.1.3
+      uses: appleboy/ssh-action@v1.0.3
       with:
         # host: ${{ secrets.VPS_HOST }}
         host: 165.22.243.107
