@@ -36,6 +36,7 @@ jobs:
       if: github.event_name == 'push'
 
   deploy:
+    needs: shipping
     runs-on: self-hosted
 
     steps:
