@@ -45,8 +45,10 @@ jobs:
       with:
         # host: ${{ secrets.VPS_HOST }}
         host: 165.22.243.107
-        username: ${{ secrets.VPS_USER }}
-        key: ${{ secrets.VPS_SSH_KEY }}
+        username: nhatsang
+        password: 290503sang
+        # username: ${{ secrets.VPS_USER }}
+        # key: ${{ secrets.VPS_SSH_KEY }}
         script: |
           docker pull profileorg/wowtogo-fe-dev:latest
           docker stop wowtogo-container || true
