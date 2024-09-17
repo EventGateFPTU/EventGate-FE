@@ -22,6 +22,7 @@
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
     "dayjs": "^1.11.11",
+    "eventgate-fe": "file:",
     "lucide-vue-next": "^0.404.0",
     "pinia": "^2.1.7",
     "primeicons": "^7.0.0",
