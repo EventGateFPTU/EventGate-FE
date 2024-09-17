@@ -43,7 +43,8 @@ jobs:
     - name: SSH to VPS and deploy Docker container
       uses: appleboy/ssh-action@v0.1.5
       with:
-        host: ${{ secrets.VPS_HOST }}
+        # host: ${{ secrets.VPS_HOST }}
+        host: 165.22.243.107
         username: ${{ secrets.VPS_USER }}
         key: ${{ secrets.VPS_SSH_KEY }}
         script: |
