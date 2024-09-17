@@ -43,8 +43,8 @@ jobs:
     - name: SSH to VPS and deploy Docker container
       uses: appleboy/ssh-action@v0.1.5
       with:
-        host: ${{ secrets.VPS_HOST }}
-        username: ${{ secrets.VPS_USER }}
+        host: 165.22.243.107
+        username: nhatsang
         password: 290503sang
         script: |
           docker pull profileorg/wowtogo-fe-dev:latest
