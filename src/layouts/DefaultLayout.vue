@@ -1,6 +1,6 @@
 <template>
   <div class="relative">
-    <div id="nav" class="flex h-32 items-center justify-between bg-[#BFFF50] px-24">
+    <div id="nav" class="relative z-30 flex h-32 items-center justify-between bg-[#BFFF50] px-24">
       <div class="w-80">
         <div v-if="isAuthenticated">
           <Avatar
@@ -114,7 +114,7 @@
       <div class="absolute top-0 h-[calc(100vh_-_8rem)] overflow-hidden">
         <img fill="none" src="@/assets/background-logo.png" class="z-0 w-full" />
       </div>
-      <div class="relative z-20 h-full min-h-[calc(100vh_-_8rem)] bg-[#4A3F9F]">
+      <div class="relative z-20 h-full min-h-[calc(100vh_-_8rem)] bg-[#FFFBE2]">
         <slot />
       </div>
     </div>

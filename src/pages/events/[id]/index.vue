@@ -1,21 +1,92 @@
+<script setup lang="ts">
+import DefaultLayout from '@/layouts/DefaultLayout.vue'
+import { GetEventById, type GetEventByIdResponse } from '@/services/events'
+import { Pagination } from 'swiper/modules'
+import { Swiper, SwiperSlide } from 'swiper/vue'
+import { onMounted, ref } from 'vue'
+import { useRoute } from 'vue-router'
+
+const route = useRoute('/events/[id]/')
+
+const modules = [Pagination]
+
+const images = [
+  {
+    src: '@/assets/test-background.png'
+  },
+  {
+    src: '@/assets/test-background.png'
+  },
+  {
+    src: '@/assets/test-background.png'
+  },
+  {
+    src: '@/assets/test-background.png'
+  },
+  {
+    src: '@/assets/test-background.png'
+  }
+]
+
+const tickets = [
+  {
+    name: 'Ticket 1',
+    price: 100000
+  },
+  {
+    name: 'Ticket 2',
+    price: 200000
+  },
+  {
+    name: 'Ticket 3',
+    price: 300000
+  },
+  {
+    name: 'Ticket 4',
+    price: 400000
+  }
+]
+
+const event = ref<GetEventByIdResponse>()
+
+onMounted(() => {
+  GetEventById(route.params.id).then(({ data }) => (event.value = data.value))
+})
+</script>
+
 <template>
   <DefaultLayout :has-footer="true" :has-user-indicator="true">
-    <div class="relative flex w-full justify-center pt-32" v-if="event">
-      <div class="container space-y-16 pb-[400px]">
-        <div>
-          <div class="grid grid-cols-3 gap-4">
-            <div class="col-span-2">
-              <img :src="event.backgroundImageUrl" alt="" class="w-full rounded-3xl" />
-            </div>
-            <div class="flex flex-col justify-center">
-              <h2 class="text-3xl">{{ event.title }}</h2>
-            </div>
+    <div class="relative flex w-full flex-col justify-center" v-if="event">
+      <img :src="event.backgroundImageUrl" alt="" class="w-full" />
+      <div class="relative">
+        <img
+          src="@/assets/ellipse.png"
+          alt=""
+          class="absolute -z-40 w-full -translate-y-[70%] drop-shadow-2xl"
+        />
+        <div class="px-32 pt-20 text-[#0088FF]">
+          <div class="relative">
+            <h2 class="text-2xl font-bold">Hình ảnh sự kiện</h2>
+            <swiper
+              :slidesPerView="3"
+              :spaceBetween="30"
+              :pagination="{
+                clickable: true
+              }"
+              :modules="modules"
+              autoplay
+            >
+              <SwiperSlide v-for="image in images" :key="image.src">
+                <img
+                  src="@/assets/test-background.png"
+                  :alt="event.title"
+                  class="border-round w-[1000px] rounded-3xl"
+                />
+              </SwiperSlide>
+            </swiper>
           </div>
-        </div>
-
-        <div class="space-y-8 rounded-2xl bg-white p-8">
-          <div class="grid grid-cols-4 gap-16">
-            <div class="relative space-y-8">
+          <div class="relative flex flex-row-reverse justify-between gap-16">
+            <div class="relative w-80 space-y-8">
               <h2 class="text-2xl font-bold">BAN TỔ CHỨC</h2>
               <div class="flex flex-col items-center gap-4">
                 <img :src="event.organizerImageUrl" alt="" class="w-full rounded-3xl" />
@@ -25,39 +96,44 @@
 
               <p>{{ event.organizerDescription }}</p>
             </div>
-            <div class="col-span-3 space-y-8">
-              <h2 class="text-2xl font-bold">THÔNG TIN SỰ KIỆN</h2>
+            <div class="space-y-8">
+              <h2 class="text-2xl font-bold">Thông tin sự kiện</h2>
 
               <p v-html="event.description" class="text-xl"></p>
             </div>
           </div>
+        </div>
+      </div>
+      <div class="space-y-16 px-32 pb-[400px] pt-[20%]">
+        <h2 class="text-2xl font-bold">HẠNG VÉ</h2>
 
-          <h2 class="text-2xl font-bold">HẠNG VÉ</h2>
-
-          <div class="rounded-md border p-0">
-            <div class="flex h-16 items-center p-4 text-xl">
-              <p class="font-semibold">Thông tin vé</p>
+        <div class="grid grid-cols-6 gap-12">
+          <div class="col-span-5 space-y-8">
+            <div
+              v-for="ticket in tickets"
+              :key="ticket.name"
+              class="flex items-center justify-between rounded-2xl bg-[#0088FF] p-2 text-white"
+            >
+              <h3 class="text-xl font-semibold">{{ ticket.name }}</h3>
+              <div class="font-semibold">Số Lượng:</div>
+              <p class="rounded-full bg-white px-12 py-1 text-xl text-[#0088FF]">
+                {{ ticket.price }} VNĐ
+              </p>
             </div>
-            <ShowsAccordion :event />
+          </div>
+          <div
+            class="flex items-center justify-center rounded-3xl bg-[#0088FF] text-xl font-semibold text-white"
+          >
+            Quảng cáo
+          </div>
+        </div>
+        <div>
+          <!-- <ShowsAccordion :event /> -->
+          <div class="flex items-center justify-between">
+            <span></span>
           </div>
         </div>
       </div>
     </div>
   </DefaultLayout>
 </template>
-
-<script setup lang="ts">
-import ShowsAccordion from '@/components/shows/ShowsAccordion.vue'
-import DefaultLayout from '@/layouts/DefaultLayout.vue'
-import { GetEventById, type GetEventByIdResponse } from '@/services/events'
-import { onMounted, ref } from 'vue'
-import { useRoute } from 'vue-router'
-
-const route = useRoute('/events/[id]/')
-
-const event = ref<GetEventByIdResponse>()
-
-onMounted(() => {
-  GetEventById(route.params.id).then(({ data }) => (event.value = data.value))
-})
-</script>
