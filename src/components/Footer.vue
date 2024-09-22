@@ -1,8 +1,10 @@
 <template>
-  <div class="relative">
-    <img fill="none" src="@/assets/wave.png" class="w-full" />
-    <div class="absolute bottom-0 m-0 flex h-96 w-screen items-center justify-around">
-      <img src="@/assets/logo.png" class="my-auto w-80" />
+  <div class="m-0 grid h-96 w-screen grid-cols-3 bg-[#FFFBE2]">
+    <div></div>
+    <div class="flex items-center justify-center">
+      <img src="@/assets/qr.png" alt="" class="w-60" />
+    </div>
+    <div class="flex items-start justify-around">
       <div class="flex h-full w-80 flex-col justify-start text-wrap pt-12 *:py-3">
         <div>
           <h1 class="text-2xl font-bold">Hotline:</h1>
