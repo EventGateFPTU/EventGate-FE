@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import DefaultLayout from '@/layouts/DefaultLayout.vue'
 import { GetEventById, type GetEventByIdResponse } from '@/services/events'
+import { useElementSize } from '@vueuse/core'
 import { Pagination } from 'swiper/modules'
 import { Swiper, SwiperSlide } from 'swiper/vue'
 import { onMounted, ref } from 'vue'
@@ -49,6 +50,9 @@ const tickets = [
 
 const event = ref<GetEventByIdResponse>()
 
+const contentRef = ref()
+const { height } = useElementSize(contentRef)
+
 onMounted(() => {
   GetEventById(route.params.id).then(({ data }) => (event.value = data.value))
 })
@@ -62,10 +66,13 @@ onMounted(() => {
         <img
           src="@/assets/ellipse.png"
           alt=""
-          class="absolute -z-40 w-full -translate-y-[70%] drop-shadow-2xl"
+          class="absolute -z-40 w-full drop-shadow-2xl"
+          :style="{
+            transform: `translateY(-${height * 2.2}px)`
+          }"
         />
-        <div class="px-32 pt-20 text-[#0088FF]">
-          <div class="relative">
+        <div class="space-y-8 px-32 pt-20 text-[#0088FF]" ref="contentRef">
+          <div class="relative space-y-8">
             <h2 class="text-2xl font-bold">Hình ảnh sự kiện</h2>
             <swiper
               :slidesPerView="3"
