@@ -1,7 +1,8 @@
 import './assets/main.css'
 import 'primeicons/primeicons.css'
-import 'primevue/resources/themes/aura-light-green/theme.css'
+import 'primevue/resources/themes/aura-light-blue/theme.css'
 import 'swiper/css'
+import 'swiper/css/pagination'
 
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
