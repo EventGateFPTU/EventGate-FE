@@ -82,7 +82,7 @@
           </div>
 
           <div class="mini-banner-carousel">
-            <Carousel :value="tickets" :numVisible="7" :numScroll="3">
+            <Carousel :value="tickets" :numVisible="5" :numScroll="2">
               <template #item="slotProps">
                 <div class="mini-banner-frame group relative">
                   <img
@@ -133,7 +133,7 @@
           </div>
 
           <div class="mini-banner-carousel">
-            <Carousel :value="tickets" :numVisible="7" :numScroll="3">
+            <Carousel :value="tickets" :numVisible="5" :numScroll="2">
               <template #item="slotProps">
                 <div class="mini-banner-frame group relative">
                   <img
@@ -184,7 +184,7 @@
           </div>
 
           <div class="mini-banner-carousel">
-            <Carousel :value="tickets" :numVisible="7" :numScroll="3">
+            <Carousel :value="tickets" :numVisible="5" :numScroll="2">
               <template #item="slotProps">
                 <div class="mini-banner-frame group relative">
                   <img
@@ -418,8 +418,8 @@ const responsiveOptions = ref([
 
 .mini-banner-frame {
   position: relative;
-  width: 200px;
-  height: 200px;
+  width: 280px;
+  height: 270px;
   background-color: #007bff;
   border-radius: 10px;
   overflow: hidden;
@@ -487,17 +487,6 @@ const responsiveOptions = ref([
   background-color: #fdf6e3;
   padding: 200px;
 }
-
-/* .decorative-section::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 40px;
-  background-color: #b3e5fc;
-  border-radius: 0 0 50% 50%;
-} */
 
 .decorative-section .z-10 {
   position: relative;
