@@ -1,5 +1,5 @@
 <template>
-  <DefaultLayout :has-footer="false" :has-user-indicator="true">
+  <DefaultLayout :has-footer="true" :has-user-indicator="true">
     <div class="event-promo">
       <div class="movie-banner-carousel">
         <Carousel :value="movieBanners" :numVisible="1" :numScroll="1" :autoplayInterval="3000">
