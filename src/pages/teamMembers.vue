@@ -7,7 +7,7 @@
           We are a team of passionate individuals who are building the future of event ticketing.
         </p>
 
-        <h2>Our Team</h2>
+        <!-- <h2>Our Team</h2> -->
 
         <div class="team-grid">
           <div class="team-member" v-for="member in teamMembers" :key="member.name">
@@ -19,7 +19,7 @@
   </DefaultLayout>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
 import chienImage from '@/assets/chien.png'
 import cuongImage from '@/assets/cuong.png'
 import linhImage from '@/assets/linh.png'
@@ -27,45 +27,39 @@ import namImage from '@/assets/nam.png'
 import sangImage from '@/assets/sang.png'
 import thiImage from '@/assets/thi.png'
 import DefaultLayout from '@/layouts/DefaultLayout.vue'
-import { defineComponent, ref } from 'vue'
-export default defineComponent({
-  setup() {
-    const teamMembers = ref([
-      {
-        name: 'Quang Chiến',
-        role: 'IT',
-        image: chienImage
-      },
-      {
-        name: 'Ngọc Linh',
-        role: 'MKT - CEO',
-        image: linhImage
-      },
-      {
-        name: 'Lưu Cường',
-        role: 'IT',
-        image: cuongImage
-      },
-      {
-        name: 'Minh Thi',
-        role: 'MMT',
-        image: thiImage
-      },
-      {
-        name: 'Nhật Sang',
-        role: 'IT',
-        image: sangImage
-      },
-      {
-        name: 'Hoàng Nam',
-        role: 'DES',
-        image: namImage
-      }
-    ])
-
-    return { teamMembers }
+import { ref } from 'vue'
+const teamMembers = ref([
+  {
+    name: 'Quang Chiến',
+    role: 'IT',
+    image: chienImage
+  },
+  {
+    name: 'Ngọc Linh',
+    role: 'MKT - CEO',
+    image: linhImage
+  },
+  {
+    name: 'Lưu Cường',
+    role: 'IT',
+    image: cuongImage
+  },
+  {
+    name: 'Minh Thi',
+    role: 'MMT',
+    image: thiImage
+  },
+  {
+    name: 'Nhật Sang',
+    role: 'IT',
+    image: sangImage
+  },
+  {
+    name: 'Hoàng Nam',
+    role: 'DES',
+    image: namImage
   }
-})
+])
 </script>
 
 <style scoped>
