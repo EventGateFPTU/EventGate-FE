@@ -118,7 +118,7 @@
         <slot />
       </div>
     </div>
-    <div v-if="hasFooter" class="absolute bottom-0 z-10 w-full">
+    <div v-if="hasFooter" class="absolute z-10 w-full">
       <Footer />
     </div>
   </div>
