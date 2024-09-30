@@ -30,5 +30,6 @@ declare module 'vue-router/auto-routes' {
     '/show/[id]/checkin': RouteRecordInfo<'/show/[id]/checkin', '/show/:id/checkin', { id: ParamValue<true> }, { id: ParamValue<false> }>,
     '/staff/': RouteRecordInfo<'/staff/', '/staff', Record<never, never>, Record<never, never>>,
     '/staff/events/[id]': RouteRecordInfo<'/staff/events/[id]', '/staff/events/:id', { id: ParamValue<true> }, { id: ParamValue<false> }>,
+    '/teamMembers': RouteRecordInfo<'/teamMembers', '/teamMembers', Record<never, never>, Record<never, never>>,
   }
 }
