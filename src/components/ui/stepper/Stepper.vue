@@ -1,7 +1,7 @@
 <template>
   <div :class="cn('', $props.class)">
-    <div :class="cn('relative flex w-full justify-center py-8', contentClass)">
-      <div v-for="{ key } in steps" :key class="h-full">
+    <div :class="cn('relative  w-full  py-8', contentClass)">
+      <div v-for="{ key } in steps" :key class="h-full w-full">
         <slot :name="key" v-if="key == currentStep.key" :nextStep />
       </div>
     </div>

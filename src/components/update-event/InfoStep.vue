@@ -1,82 +1,124 @@
 <template>
-  <div class="w-[80vw] rounded-3xl bg-white">
-    <form @submit="onSubmit" class="space-y-20 p-10" @keydown.enter.prevent>
-      <h2 class="text-3xl">THÔNG TIN SỰ KIỆN</h2>
-      <FileUploader
-        name="background"
-        :width="1280"
-        :height="720"
-        desc="Thêm ảnh nền sự kiện"
-        :fileUrl="event.backgroundImageUrl"
-        @update:file="backgroundImage = $event"
-      />
+  <div class="w-full rounded-3xl bg-[#D6F6FF]">
+    <form @submit="onSubmit" class="w-full space-y-20 p-10" @keydown.enter.prevent>
+      <h2 class="text-3xl">THÔNG TIN</h2>
+      <h3 class="text-2xl">Thông tin sự kiện</h3>
+      <div class="relative pb-24">
+        <div class="absolute flex w-full justify-center">
+          <img
+            src="@/assets/ticket-frame.png"
+            alt=""
+            class="h-[calc(18rem_+_15vh)] w-[90%] rounded-3xl"
+          />
+        </div>
+        <div class="relative grid grid-cols-12 gap-20 px-[8vw] py-[5vh]">
+          <div class="col-span-4 space-y-2">
+            <div class="flex flex-col gap-4">
+              <label for="title">Tên sự kiện</label>
+              <InputText
+                v-model="title"
+                placeholder="Tên sự kiện"
+                :class="{ 'p-invalid': errors.title }"
+              />
+              <small id="title-help" class="p-error">
+                {{ errors.title }}
+              </small>
+            </div>
 
-      <div class="grid grid-cols-4 gap-8">
-        <FileUploader
-          name="banner"
-          :width="720"
-          :height="958"
-          desc="Thêm banner sự kiện"
-          :fileUrl="event.bannerImageUrl"
-          @update:file="bannerImage = $event"
-        />
-        <div class="col-span-3 space-y-2">
-          <div class="flex flex-col gap-4">
-            <label for="title">Tên sự kiện</label>
-            <InputText
-              v-model="title"
-              placeholder="Tên sự kiện"
-              :class="{ 'p-invalid': errors.title }"
-            />
-            <small id="title-help" class="p-error">
-              {{ errors.title }}
-            </small>
+            <div class="flex flex-col gap-4">
+              <label for="address">Địa điểm sự kiện</label>
+              <InputText
+                v-model="location"
+                placeholder="Địa điểm sự kiện"
+                :class="{ 'p-invalid': errors.location }"
+              />
+              <small id="location-help" class="p-error">
+                {{ errors.location }}
+              </small>
+            </div>
+
+            <div class="flex flex-col gap-2">
+              <label for="category">Thể loại sự kiện</label>
+              <CategoriesTagsInput v-model:category-ids="categoryIds" />
+            </div>
           </div>
-
-          <div class="flex flex-col gap-4">
-            <label for="address">Địa điểm sự kiện</label>
-            <InputText
-              v-model="location"
-              placeholder="Địa điểm sự kiện"
-              :class="{ 'p-invalid': errors.location }"
-            />
-            <small id="location-help" class="p-error">
-              {{ errors.location }}
+          <div></div>
+          <div class="col-span-7">
+            <small id="description-help" class="p-error">
+              {{ errors.description }}
             </small>
+            <Editor
+              v-model="description"
+              class="h-72"
+              :class="{ 'p-invalid': errors.description }"
+            />
           </div>
         </div>
       </div>
+      <h2 class="text-2xl">Ảnh nền sự kiện</h2>
+      <div>
+        <FileUploader
+          name="background"
+          :width="1280"
+          :height="720"
+          desc="Thêm ảnh nền sự kiện"
+          v-model:file="backgroundImage"
+        />
+        <small id="backgroundImage-help" class="p-error">
+          {{ backgroundImageError }}
+        </small>
+      </div>
 
-      <div class="space-y-4">
-        <div class="flex flex-col gap-2">
-          <label for="category">Thể loại sự kiện</label>
-          <CategoriesTagsInput :categories="event.categories" v-model:category-ids="categoryIds" />
+      <h2 class="text-2xl">Hình ảnh của sự kiện</h2>
+      <div class="flex gap-8">
+        <div v-for="i in images" :key="i.index" class="w-64">
+          <FileUploader
+            :name="i.index.toString()"
+            :width="720"
+            :height="958"
+            desc="Thêm ảnh nền sự kiện"
+            :file="i.file"
+            @update:file="addImage(i.index ?? null, $event)"
+          />
         </div>
+        <div class="w-64" v-if="images.length < 5">
+          <FileUploader
+            :key="id"
+            :name="id.toString()"
+            :width="720"
+            :height="958"
+            desc="Thêm ảnh nền sự kiện"
+            :file="null"
+            @update:file="addImage(null, $event)"
+          />
+        </div>
+      </div>
 
+      <h2 class="text-2xl">Logo và thông tin của ban tổ chức</h2>
+
+      <div class="grid grid-cols-4 gap-8">
         <div>
-          <small id="description-help" class="p-error">
-            {{ errors.description }}
-          </small>
-          <Editor v-model="description" class="h-72" :class="{ 'p-invalid': errors.description }" />
+          <FileUploader
+            :file-url="organizer?.imageUrl"
+            v-model:file="organizationLogoImage"
+            name="organizer"
+            :width="257"
+            :height="257"
+            desc="Thêm banner sự kiện"
+          />
         </div>
-      </div>
-
-      <div class="grid grid-cols-4 gap-8">
-        <FileUploader
-          :file-url="organizer?.imageUrl"
-          name="organizer"
-          :width="257"
-          :height="257"
-          desc="Thêm banner sự kiện"
-        />
-        <div class="col-span-3 space-y-2">
+        <div class="col-span-3 space-y-2 rounded-xl bg-[#0088FF] p-10">
           <div class="flex flex-col gap-4">
             <label for="organizationName">Tên ban tổ chức</label>
             <InputText
               v-model="organizationName"
               id="organizationName"
               placeholder="Tên ban tổ chức"
+              :class="{ 'p-invalid': errors.organizationName }"
             />
+            <small id="organizationName-help" class="p-error">
+              {{ errors.organizationName }}
+            </small>
           </div>
 
           <div class="flex flex-col gap-4">
@@ -85,7 +127,12 @@
               v-model="organizationDesc"
               id="organizationDesc"
               placeholder="Thông tin ban tổ chức"
+              class="h-[10rem] flex-grow"
+              :class="{ 'p-invalid': errors.organizationDesc }"
             />
+            <small id="organizationDesc-help" class="p-error">
+              {{ errors.organizationDesc }}
+            </small>
           </div>
         </div>
       </div>
@@ -129,6 +176,24 @@ const props = defineProps<{
 const categoryIds = ref<string[]>([])
 
 const toast = useToast()
+const images = ref<{ index: number; file: File | null }[]>([])
+const id = ref<number>(0)
+
+function addImage(index: number | null, file: File | null) {
+  if (images.value.length >= 5) return
+  if (!index && !file) return
+  if (!file) {
+    images.value = images.value.filter((i) => i.index !== index)
+    id.value++
+    return
+  }
+
+  images.value.push({
+    index: images.value.reduce((a, b) => Math.max(a, b.index ?? 0), 0) + 1,
+    file
+  })
+  id.value++
+}
 
 const formSchema = toTypedSchema(
   z.object({
@@ -140,9 +205,9 @@ const formSchema = toTypedSchema(
   })
 )
 
-const backgroundImage = ref<File | null>()
-const bannerImage = ref<File | null>()
-const organizationLogoImage = ref<File | null>()
+const backgroundImage = ref<File | null>(null)
+const bannerImage = ref<File | null>(null)
+const organizationLogoImage = ref<File | null>(null)
 watchEffect(() => {
   if (backgroundImage.value) backgroundImageError.value = undefined
 })
