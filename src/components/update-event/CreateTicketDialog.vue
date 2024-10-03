@@ -83,10 +83,6 @@
             </small>
           </div>
         </div>
-        <div class="space-y-2">
-          <label id="image" class="font-semibold">Hình ảnh vé</label>
-          <FileUploader name="Logo" desc="" :width="275" :height="275" />
-        </div>
       </div>
 
       <div class="flex justify-end gap-4">
