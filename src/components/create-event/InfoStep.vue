@@ -74,9 +74,9 @@
         <div v-for="i in images" :key="i.index" class="w-64">
           <FileUploader
             :name="i.index.toString()"
-            :width="720"
-            :height="958"
-            desc="Thêm ảnh nền sự kiện"
+            :width="1280"
+            :height="720"
+            desc="Thêm ảnh cho sự kiện"
             :file="i.file"
             @update:file="addImage(i.index ?? null, $event)"
           />
@@ -85,9 +85,9 @@
           <FileUploader
             :key="id"
             :name="id.toString()"
-            :width="720"
-            :height="958"
-            desc="Thêm ảnh nền sự kiện"
+            :width="1280"
+            :height="720"
+            desc="Thêm ảnh cho sự kiện"
             :file="null"
             @update:file="addImage(null, $event)"
           />
@@ -144,7 +144,12 @@
 
 <script setup lang="ts">
 import { FileUploader } from '@/components/file-upload'
-import { CreateEvent, UploadBackground, UploadBanner } from '@/services/events'
+import {
+  CreateEvent,
+  UploadAdditionalImage,
+  UploadBackground,
+  UploadBanner
+} from '@/services/events'
 import { toTypedSchema } from '@vee-validate/zod'
 import Button from 'primevue/button'
 import Editor from 'primevue/editor'
@@ -276,11 +281,16 @@ const onSubmit = handleSubmit(async (values) => {
 
   const eventId = data.value.id
 
+  for (const image of images.value) {
+    if (!image.file) continue
+    promises.push(UploadAdditionalImage(eventId, image.file))
+  }
+
   promises.push([UploadBackground(eventId, backgroundImage.value)])
 
   await Promise.all(promises)
 
-  await router.push(`/organizer/create-event/${eventId}`)
+  await router.push(`/organizer/events/${eventId}?tab=settings`)
 
   toast.add({
     summary: 'Save draft successfully',

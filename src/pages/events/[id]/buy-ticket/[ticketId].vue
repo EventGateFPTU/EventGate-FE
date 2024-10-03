@@ -130,15 +130,6 @@
                   <Button type="submit" class="mt-10">Continue</Button>
                 </div>
               </div>
-              <div
-                class="relative flex items-center justify-end gap-4 p-4 transition-all duration-1000"
-                :class="{
-                  '-translate-y-28': !orderCreated
-                }"
-              >
-                <span class="text-xl font-semibold text-white">Tui em xin loi thay</span>
-                <Button type="button" @click="confirmPaid">Magic</Button>
-              </div>
             </div>
           </form>
         </div>
@@ -197,6 +188,8 @@ const [lastName] = defineField('lastName')
 const [phoneNumber] = defineField('phoneNumber')
 const [dateOfBirth] = defineField('dateOfBirth')
 
+const router = useRouter()
+
 const orderId = ref()
 const onSubmit = handleSubmit((values) => {
   if (!ticketType.value) return
@@ -204,13 +197,7 @@ const onSubmit = handleSubmit((values) => {
     ...values,
     ticketTypeId: ticketType.value.id
   }).then(({ data }) => {
-    if (!data.isSuccess) return
-    orderCreated.value = true
-    orderId.value = data.value.id
-    toast.add({
-      detail: 'Order successfully created',
-      life: 3000
-    })
+    location.href = data.value.checkoutUrl
   })
 })
 

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import ShowsAccordion from '@/components/shows/ShowsAccordion.vue'
 import DefaultLayout from '@/layouts/DefaultLayout.vue'
 import { GetEventById, type GetEventByIdResponse } from '@/services/events'
 import { useElementSize } from '@vueuse/core'
@@ -72,7 +73,7 @@ onMounted(() => {
           }"
         />
         <div class="space-y-8 px-32 pt-20 text-[#0088FF]" ref="contentRef">
-          <div class="relative space-y-8">
+          <div class="relative space-y-8" v-if="event.additionalImages.length > 0">
             <h2 class="text-2xl font-bold">Hình ảnh sự kiện</h2>
             <swiper
               :slidesPerView="3"
@@ -83,12 +84,8 @@ onMounted(() => {
               :modules="modules"
               autoplay
             >
-              <SwiperSlide v-for="image in images" :key="image.src">
-                <img
-                  src="@/assets/test-background.png"
-                  :alt="event.title"
-                  class="border-round w-[1000px] rounded-3xl"
-                />
+              <SwiperSlide v-for="image in event.additionalImages" :key="image">
+                <img :src="image" :alt="event.title" class="border-round w-[1000px] rounded-3xl" />
               </SwiperSlide>
             </swiper>
           </div>
@@ -116,28 +113,12 @@ onMounted(() => {
 
         <div class="grid grid-cols-6 gap-12">
           <div class="col-span-5 space-y-8">
-            <div
-              v-for="ticket in tickets"
-              :key="ticket.name"
-              class="flex items-center justify-between rounded-2xl bg-[#0088FF] p-2 text-white"
-            >
-              <h3 class="text-xl font-semibold">{{ ticket.name }}</h3>
-              <div class="font-semibold">Số Lượng:</div>
-              <p class="rounded-full bg-white px-12 py-1 text-xl text-[#0088FF]">
-                {{ ticket.price }} VNĐ
-              </p>
-            </div>
+            <ShowsAccordion :event />
           </div>
           <div
             class="flex items-center justify-center rounded-3xl bg-[#0088FF] text-xl font-semibold text-white"
           >
             Quảng cáo
-          </div>
-        </div>
-        <div>
-          <!-- <ShowsAccordion :event /> -->
-          <div class="flex items-center justify-between">
-            <span></span>
           </div>
         </div>
       </div>

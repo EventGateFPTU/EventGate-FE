@@ -44,6 +44,7 @@ export type GetEventByIdResponse = BaseEvent & {
   categories: EventCategory[]
   organizerImageUrl: string
   organizerDescription: string
+  addtionalImages: string[]
 }
 
 export function GetEventById(eventId: string) {
@@ -88,6 +89,18 @@ export function UploadBackground(eventId: string, file: File) {
 export function UploadBanner(eventId: string, file: File) {
   return axiosClient.put(
     `/events/${eventId}/banner`,
+    { file },
+    {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    }
+  )
+}
+
+export function UploadAdditionalImage(eventId: string, file: File) {
+  return axiosClient.put(
+    `/events/${eventId}/additional`,
     { file },
     {
       headers: {

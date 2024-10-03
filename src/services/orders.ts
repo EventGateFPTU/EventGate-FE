@@ -9,8 +9,23 @@ type CreateOrderRequest = {
   phoneNumber: string
   dateOfBirth: Date
 }
+
 export function CreateOrder(req: CreateOrderRequest) {
-  return axiosClient.post<Response<{ id: string }>>('/orders', req)
+  return axiosClient.post<
+    Response<{
+      bin: string
+      accountNumber: string
+      amount: number
+      description: string
+      orderCode: number
+      currency: string
+      paymentLinkId: string
+      status: string
+      expiredAt: Date | null
+      checkoutUrl: string
+      qrCode: string
+    }>
+  >('/orders', req)
 }
 
 export function ConfirmPaid(orderId: string) {

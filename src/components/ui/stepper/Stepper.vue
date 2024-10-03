@@ -1,6 +1,6 @@
 <template>
   <div :class="cn('', $props.class)">
-    <div :class="cn('relative  w-full  py-8', contentClass)">
+    <div :class="cn('relative  w-full', contentClass)">
       <div v-for="{ key } in steps" :key class="h-full w-full">
         <slot :name="key" v-if="key == currentStep.key" :nextStep />
       </div>

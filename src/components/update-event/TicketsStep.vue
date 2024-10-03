@@ -1,5 +1,5 @@
 <template>
-  <div class="flex w-full justify-center bg-[#D6F6FF] py-20">
+  <div class="flex w-full justify-center py-20">
     <div class="w-[80vw] space-y-20 rounded-3xl bg-white p-10">
       <h2 class="text-3xl">THỜI GIAN & LOẠI VÉ</h2>
 

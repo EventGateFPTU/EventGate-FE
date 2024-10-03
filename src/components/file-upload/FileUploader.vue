@@ -9,7 +9,7 @@
       :for="name"
       class="flex min-h-72 w-full cursor-pointer flex-col items-center justify-center rounded-2xl border-2 border-gray-300 bg-[#0088FF] hover:bg-[#0088FF]"
     >
-      <template v-if="file == null && !fileUrl">
+      <template v-if="!image && !fileUrl">
         <div class="flex flex-col items-center justify-center space-y-2 pb-6 pt-5">
           <img src="@/assets/upload-logo.png" class="size-16" />
           <p class="text-xs text-white">{{ desc }}</p>

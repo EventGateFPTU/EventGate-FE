@@ -26,7 +26,7 @@ import { useUrlSearchParams } from '@vueuse/core'
 import { GetCurrentOrganization } from '@/services/organizers'
 import type { BaseOrganizer } from '@/types/items'
 
-const route = useRoute('/organizer/create-event/[id]')
+const route = useRoute('/organizer/events/[id]')
 const searchParams = useUrlSearchParams<{
   step: string
 }>()
