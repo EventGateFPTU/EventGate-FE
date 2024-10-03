@@ -65,7 +65,7 @@ const teamMembers = ref([
 <style scoped>
 .about-us {
   padding: 50px 0;
-  background-color: #f8f9fa;
+  background-color: #fdf6e3;
 }
 
 .container {
