@@ -78,7 +78,7 @@
       <div class="space-y-4">
         <h2 class="text-2xl">Loại vé</h2>
         <Button
-          class="border-1 flex w-full justify-center border-dashed bg-inherit text-inherit hover:border-none hover:bg-[#10b981] hover:text-white"
+          class="border-1 flex w-full justify-center border-dashed bg-inherit text-inherit hover:border-none hover:bg-[#0088FF] hover:text-white"
           @click="visible = true"
           >+ Tạo loại vé</Button
         >

@@ -1,45 +1,47 @@
 <template>
-  <div class="w-[80vw] space-y-20 rounded-3xl bg-white p-10">
-    <h2 class="text-3xl">THỜI GIAN & LOẠI VÉ</h2>
+  <div class="flex w-full justify-center bg-[#D6F6FF] py-20">
+    <div class="w-[80vw] space-y-20 rounded-3xl bg-white p-10">
+      <h2 class="text-3xl">THỜI GIAN & LOẠI VÉ</h2>
 
-    <div class="space-y-4">
-      <ShowPanel
-        v-for="show in shows"
-        :eventId
-        :isNew="false"
-        :key="show.id"
-        :show
-        @hasError="check(show.id, $event)"
-        @remove:show="DeleteShow(show.id).then(() => refetch())"
-      />
+      <div class="space-y-4">
+        <ShowPanel
+          v-for="show in shows"
+          :eventId
+          :isNew="false"
+          :key="show.id"
+          :show
+          @hasError="check(show.id, $event)"
+          @remove:show="DeleteShow(show.id).then(() => refetch())"
+        />
 
-      <ShowPanel
-        v-for="(show, index) in showsToAdd"
-        :eventId
-        :isNew="true"
-        :key="show.id"
-        :show
-        @hasError="check(show.id, $event)"
-        @remove:show="showsToAdd.splice(index, 1)"
-      />
-    </div>
+        <ShowPanel
+          v-for="(show, index) in showsToAdd"
+          :eventId
+          :isNew="true"
+          :key="show.id"
+          :show
+          @hasError="check(show.id, $event)"
+          @remove:show="showsToAdd.splice(index, 1)"
+        />
+      </div>
 
-    <Button
-      class="flex w-full justify-center border-dashed bg-inherit text-inherit hover:border-none hover:bg-[#10b981] hover:text-white"
-      @click="
-        showsToAdd.push({ id: cur++, endsAt: undefined, startsAt: undefined, ticketTypeIds: [] })
-      "
-    >
-      + Tạo suất diễn
-    </Button>
+      <Button
+        class="flex w-full justify-center border-dashed bg-inherit text-inherit hover:border-none hover:bg-[#0088FF] hover:text-white"
+        @click="
+          showsToAdd.push({ id: cur++, endsAt: undefined, startsAt: undefined, ticketTypeIds: [] })
+        "
+      >
+        + Tạo suất diễn
+      </Button>
 
-    <small class="p-error">
-      {{ hasError ? 'Please fill in all the fields' : null }}
-    </small>
+      <small class="p-error">
+        {{ hasError ? 'Please fill in all the fields' : null }}
+      </small>
 
-    <div class="grid grid-cols-3 gap-4">
-      <Button class="flex justify-center" :disabled="hasError" @click="save">Save</Button>
-      <Button class="col-span-2 flex justify-center" @click="nextStep">Next</Button>
+      <div class="grid grid-cols-3 gap-4">
+        <Button class="flex justify-center" :disabled="hasError" @click="save">Save</Button>
+        <Button class="col-span-2 flex justify-center" @click="nextStep">Next</Button>
+      </div>
     </div>
   </div>
 </template>

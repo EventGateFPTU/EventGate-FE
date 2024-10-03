@@ -1,7 +1,5 @@
 <template>
-  <div class="flex justify-center py-32">
-    <InfoStep v-if="done" :organizer />
-  </div>
+  <InfoStep v-if="done" :organizer />
 </template>
 
 <script setup lang="ts">

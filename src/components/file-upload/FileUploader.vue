@@ -7,13 +7,13 @@
   >
     <label
       :for="name"
-      class="flex min-h-72 w-full cursor-pointer flex-col items-center justify-center rounded-2xl border-2 border-dashed border-gray-300 bg-gray-50 hover:bg-gray-100"
+      class="flex min-h-72 w-full cursor-pointer flex-col items-center justify-center rounded-2xl border-2 border-gray-300 bg-[#0088FF] hover:bg-[#0088FF]"
     >
       <template v-if="file == null && !fileUrl">
         <div class="flex flex-col items-center justify-center space-y-2 pb-6 pt-5">
-          <img src="@/assets/upload-logo.png" />
-          <p class="text-xs text-gray-500">{{ desc }}</p>
-          <p class="text-xs text-gray-500">({{ width }} x {{ height }})</p>
+          <img src="@/assets/upload-logo.png" class="size-16" />
+          <p class="text-xs text-white">{{ desc }}</p>
+          <p class="text-xs text-white">({{ width }} x {{ height }})</p>
         </div>
         <input :id="name" type="file" class="hidden" @change="onFileChanged" />
       </template>
@@ -25,7 +25,7 @@
       v-if="fileUrl ?? file"
       class="absolute right-4 top-4"
       severity="danger"
-      @click="file = null"
+      @click="$emit('update:file', null)"
       >X</Button
     >
   </div>
@@ -37,23 +37,23 @@
 import Button from 'primevue/button'
 import Toast from 'primevue/toast'
 import { useToast } from 'primevue/usetoast'
-import { computed, onMounted, ref, toRefs, watchEffect } from 'vue'
+import { computed, onMounted, ref, toRefs, watch, watchEffect } from 'vue'
 
 const props = defineProps<{
   fileUrl?: string
+  file: File | null
   width: number
   height: number
   desc: string
   name: string
 }>()
 
-const { fileUrl } = toRefs(props)
+const { fileUrl, file } = toRefs(props)
 
 onMounted(() => {})
 
 const emit = defineEmits(['update:file'])
 
-const file = ref<File | null>()
 const toast = useToast()
 
 const image = computed(() => {
@@ -79,8 +79,7 @@ function onFileChanged(event: Event) {
         group: props.name
       })
     } else {
-      file.value = f
-      emit('update:file', file.value)
+      emit('update:file', f)
     }
   })
 }

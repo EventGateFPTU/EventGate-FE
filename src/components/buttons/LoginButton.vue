@@ -5,9 +5,13 @@
 <script setup lang="ts">
 import { useAuth0 } from '@auth0/auth0-vue'
 import Button from 'primevue/button'
+import { onMounted } from 'vue'
 
-const { loginWithRedirect } = useAuth0()
+const { loginWithRedirect, getAccessTokenSilently } = useAuth0()
 
+onMounted(() => {
+  getAccessTokenSilently().then(console.log)
+})
 const handleLogin = () => {
   loginWithRedirect({
     appState: {

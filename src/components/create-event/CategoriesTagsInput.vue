@@ -2,7 +2,7 @@
   <Popover v-model:open="open">
     <PopoverTrigger as-child>
       <div class="flex items-end gap-2">
-        <div class="flex flex-1 flex-wrap items-center gap-x-2 rounded-md border px-2">
+        <div class="flex flex-1 flex-wrap items-center gap-x-2 rounded-md border bg-white px-2">
           <Badge
             v-for="category in categories"
             :key="category.id"
