@@ -7,7 +7,7 @@
           We are a team of passionate individuals who are building the future of event ticketing.
         </p>
 
-        <!-- <h2>Our Team</h2> -->
+        <h2>Our Team</h2>
 
         <div class="team-grid">
           <div class="team-member" v-for="member in teamMembers" :key="member.name">

@@ -1,6 +1,7 @@
 <template>
   <DefaultLayout :has-footer="true" :has-user-indicator="true">
     <div class="event-promo">
+      <!-- Movie Banner Carousel -->
       <div class="movie-banner-carousel">
         <Carousel :value="movieBanners" :numVisible="1" :numScroll="1" :autoplayInterval="3000">
           <template #item="slotProps">
@@ -21,192 +22,70 @@
         </Carousel>
       </div>
 
-      <div class="ticket-carousel">
-        <Carousel
-          :value="tickets"
-          :numVisible="5"
-          :numScroll="1"
-          :responsiveOptions="responsiveOptions"
-        >
+      <!-- Trending Events -->
+      <div class="trending-events">
+        <h1 class="krona-one-regular text-4xl font-bold">TRENDING EVENTS</h1>
+        <Carousel :value="trendingEvents" :numVisible="2" :numScroll="1" :autoplayInterval="5000">
           <template #item="slotProps">
-            <div class="ticket-frame group">
-              <img :src="slotProps.data.image" alt="Event" class="ticket-image carousel-image" />
+            <div class="banner-category-frame group relative">
+              <img
+                :src="slotProps.data.image"
+                alt="Event Banner"
+                class="carousel-image h-[400px] w-full object-cover"
+              />
               <div
-                class="ticket-content absolute bottom-0 left-0 right-0 hidden bg-gradient-to-t from-black to-transparent p-6 group-hover:block"
+                class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent p-6 group-hover:block"
               >
-                <h2>{{ slotProps.data.title }}</h2>
+                <h2 class="mb-2 text-4xl font-bold text-white">{{ slotProps.data.title }}</h2>
+                <p class="text-xl text-white">{{ slotProps.data.description }}</p>
               </div>
             </div>
           </template>
         </Carousel>
       </div>
 
-      <!-- Decorative Section -->
-      <div class="decorative-section">
-        <div
-          class="wave scale-x-[1 absolute bottom-0 left-0 h-[500px] w-full transform rounded-t-full bg-[#D6F6FF]"
-        ></div>
-        <div class="bottom-20 z-10 flex items-center justify-center">
-          <img src="@/assets/home.png" alt="Ticket Image" class="h-[400px]" />
-        </div>
+      <!-- Movies Events -->
+      <div class="movies-events">
+        <h1 class="krona-one-regular text-4xl font-bold" style="margin-top: 20px">MOVIES EVENTS</h1>
+        <Carousel :value="moviesEvents" :numVisible="2" :numScroll="1" :autoplayInterval="5000">
+          <template #item="slotProps">
+            <div class="banner-category-frame group relative">
+              <img
+                :src="slotProps.data.image"
+                alt="Movies Event"
+                class="carousel-image h-[400px] w-full object-cover"
+              />
+              <div
+                class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent p-6 group-hover:block"
+              >
+                <h2 class="mb-2 text-4xl font-bold text-white">{{ slotProps.data.title }}</h2>
+                <p class="text-xl text-white">{{ slotProps.data.description }}</p>
+              </div>
+            </div>
+          </template>
+        </Carousel>
       </div>
 
-      <div class="gradient-background">
-        <div>
-          <div class="trending-events">
-            <h1 class="krona-one-regular text-4xl font-bold">TRENDING EVENTS</h1>
-            <div class="category-banner-carousel">
-              <Carousel
-                :value="movieBanners"
-                :numVisible="2"
-                :numScroll="1"
-                :autoplayInterval="5000"
+      <!-- Game Events -->
+      <div class="game-events">
+        <h1 class="krona-one-regular text-4xl font-bold" style="margin-top: 20px">GAME EVENTS</h1>
+        <Carousel :value="gameEvents" :numVisible="2" :numScroll="1" :autoplayInterval="5000">
+          <template #item="slotProps">
+            <div class="banner-category-frame group relative">
+              <img
+                :src="slotProps.data.image"
+                alt="Game Event"
+                class="carousel-image h-[400px] w-full object-cover"
+              />
+              <div
+                class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent p-6 group-hover:block"
               >
-                <template #item="slotProps">
-                  <div class="banner-category-frame group relative">
-                    <img
-                      :src="slotProps.data.image"
-                      alt="Movie Banner"
-                      class="carousel-image h-[400px] w-full object-cover"
-                    />
-                    <div
-                      class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent p-6 group-hover:block"
-                    >
-                      <h2 class="mb-2 text-4xl font-bold text-white">{{ slotProps.data.title }}</h2>
-                      <p class="text-xl text-white">{{ slotProps.data.description }}</p>
-                    </div>
-                  </div>
-                </template>
-              </Carousel>
+                <h2 class="mb-2 text-4xl font-bold text-white">{{ slotProps.data.title }}</h2>
+                <p class="text-xl text-white">{{ slotProps.data.description }}</p>
+              </div>
             </div>
-          </div>
-
-          <div class="mini-banner-carousel">
-            <Carousel :value="tickets" :numVisible="5" :numScroll="2">
-              <template #item="slotProps">
-                <div class="mini-banner-frame group relative">
-                  <img
-                    :src="slotProps.data.image"
-                    alt="Event"
-                    class="ticket-image carousel-image"
-                  />
-                  <div
-                    class="mini-banner-content absolute bottom-0 left-0 right-0 hidden bg-gradient-to-t from-black to-transparent p-6 group-hover:block"
-                  >
-                    <h2 class="text-lg font-semibold text-white">{{ slotProps.data.title }}</h2>
-                  </div>
-                </div>
-              </template>
-            </Carousel>
-          </div>
-        </div>
-
-        <div>
-          <div class="music-events">
-            <h1 class="krona-one-regular text-4xl font-bold" style="margin-top: 20px">
-              MUSIC EVENTS
-            </h1>
-            <div class="category-banner-carousel">
-              <Carousel
-                :value="movieBanners"
-                :numVisible="2"
-                :numScroll="1"
-                :autoplayInterval="5000"
-              >
-                <template #item="slotProps">
-                  <div class="banner-category-frame group relative">
-                    <img
-                      :src="slotProps.data.image"
-                      alt="Movie Banner"
-                      class="carousel-image h-[400px] w-full object-cover"
-                    />
-                    <div
-                      class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent p-6 group-hover:block"
-                    >
-                      <h2 class="mb-2 text-4xl font-bold text-white">{{ slotProps.data.title }}</h2>
-                      <p class="text-xl text-white">{{ slotProps.data.description }}</p>
-                    </div>
-                  </div>
-                </template>
-              </Carousel>
-            </div>
-          </div>
-
-          <div class="mini-banner-carousel">
-            <Carousel :value="tickets" :numVisible="5" :numScroll="2">
-              <template #item="slotProps">
-                <div class="mini-banner-frame group relative">
-                  <img
-                    :src="slotProps.data.image"
-                    alt="Event"
-                    class="ticket-image carousel-image"
-                  />
-                  <div
-                    class="mini-banner-content absolute bottom-0 left-0 right-0 hidden bg-gradient-to-t from-black to-transparent p-6 group-hover:block"
-                  >
-                    <h2 class="text-lg font-semibold text-white">{{ slotProps.data.title }}</h2>
-                  </div>
-                </div>
-              </template>
-            </Carousel>
-          </div>
-        </div>
-
-        <div>
-          <div class="game-events">
-            <h1 class="krona-one-regular text-4xl font-bold" style="margin-top: 20px">
-              GAME EVENTS
-            </h1>
-            <div class="category-banner-carousel">
-              <Carousel
-                :value="movieBanners"
-                :numVisible="2"
-                :numScroll="1"
-                :autoplayInterval="5000"
-              >
-                <template #item="slotProps">
-                  <div class="banner-category-frame group relative">
-                    <img
-                      :src="slotProps.data.image"
-                      alt="Movie Banner"
-                      class="carousel-image h-[400px] w-full object-cover"
-                    />
-                    <div
-                      class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent p-6 group-hover:block"
-                    >
-                      <h2 class="mb-2 text-4xl font-bold text-white">{{ slotProps.data.title }}</h2>
-                      <p class="text-xl text-white">{{ slotProps.data.description }}</p>
-                    </div>
-                  </div>
-                </template>
-              </Carousel>
-            </div>
-          </div>
-
-          <div class="mini-banner-carousel">
-            <Carousel :value="tickets" :numVisible="5" :numScroll="2">
-              <template #item="slotProps">
-                <div class="mini-banner-frame group relative">
-                  <img
-                    :src="slotProps.data.image"
-                    alt="Event"
-                    class="ticket-image carousel-image"
-                  />
-                  <div
-                    class="mini-banner-content absolute bottom-0 left-0 right-0 hidden bg-gradient-to-t from-black to-transparent p-6 group-hover:block"
-                  >
-                    <h2 class="text-lg font-semibold text-white">{{ slotProps.data.title }}</h2>
-                  </div>
-                </div>
-              </template>
-            </Carousel>
-          </div>
-        </div>
-      </div>
-
-      <div class="actions">
-        <Button label="Xem thêm" class="p-button-outlined" />
-        <Button label="Tạo sự kiện" icon="pi pi-plus" />
+          </template>
+        </Carousel>
       </div>
     </div>
   </DefaultLayout>
@@ -214,182 +93,60 @@
 
 <script setup lang="ts">
 import DefaultLayout from '@/layouts/DefaultLayout.vue'
-import Button from 'primevue/button'
+import { GetEvents, GetFeaturedEvents, SearchEvents } from '@/services/events'
+import type { Event } from '@/types/items'
 import Carousel from 'primevue/carousel'
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
 
-const movieBanners = ref([
-  {
-    image:
-      'https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExMzRxcmpzZXFtM2h0dHE4OXJkOXZldzlodmd5NmtmNHhudXYxamd2ayZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/Diym3aZO1dHzO/giphy.webp',
-    title: 'Goodjobs Shinji',
-    description: 'You did it! Shinji and your friends are on a mission to save the world.'
-  },
-  {
-    image:
-      'https://media2.giphy.com/media/v1.Y2lkPTc5MGI3NjExNGpic2p0aDNkM3oxaXZ3N3oyYWR0MmZ0ZmE3NjR0MDcyMzRvcWtvMiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/5T06fayphNrPayKYak/giphy.webp',
-    title: 'Romantic Comedy',
-    description: 'A heartwarming tale of love and laughter.'
-  },
-  {
-    image:
-      'https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExb3NwemhvdzVpMGU1Nzdxa2tjMGNpcDhpZDd6NDFpZ2E5MWxrNTltcyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/qbEq25szyPpG9DYpeN/giphy.webp',
-    title: 'ƯNG ĐĨ',
-    description: 'Experience the future of cinema with stunning visuals.'
-  }
-])
+// Define the reactive properties with the explicit type
+const movieBanners = ref<Event[]>([])
+const trendingEvents = ref<Event[]>([])
+const moviesEvents = ref<Event[]>([])
+const gameEvents = ref<Event[]>([])
 
-const highlightedEvents = ref([
-  {
-    id: 1,
-    image:
-      'https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExbWExeGpnaGI5anN0OGtlZWM4aGs5NzJ0M25xcGo4YzhhcXgwMDVkYyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/aQwvKKi4Lv3t63nZl9/giphy.webp',
-    title: 'Arcane',
-    date: 'Nov. 27'
-  },
-  {
-    id: 2,
-    image:
-      'https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExbWExeGpnaGI5anN0OGtlZWM4aGs5NzJ0M25xcGo4YzhhcXgwMDVkYyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/aQwvKKi4Lv3t63nZl9/giphy.webp',
-    title: 'Arcane',
-    date: 'Nov. 27'
-  }
-])
+onMounted(async () => {
+  try {
+    // Fetch featured events for trending
+    const featuredResponse = await GetFeaturedEvents(1, 5)
+    trendingEvents.value = featuredResponse.data.value.data.map((event) => ({
+      image: event.bannerImageUrl,
+      title: event.title,
+      description: event.description
+    }))
 
-const trendingEvents = ref([
-  {
-    id: 1,
-    image:
-      'https://i.cbc.ca/1.6713656.1679693029!/fileImage/httpImage/image.jpg_gen/derivatives/16x9_780/this-is-fine.jpg',
-    title: 'Spider-Man',
-    date: 'Nov. 27'
-  },
-  {
-    id: 2,
-    image:
-      'https://i.cbc.ca/1.6713656.1679693029!/fileImage/httpImage/image.jpg_gen/derivatives/16x9_780/this-is-fine.jpg',
-    title: 'Spider-Man',
-    date: 'Nov. 27'
-  }
-])
+    // Fetch all events and filter by category
+    const allEventsResponse = await GetEvents(1, 20)
+    const allEvents = allEventsResponse.data.value.data
 
-const musicEvents = ref([
-  {
-    id: 1,
-    image:
-      'https://i.cbc.ca/1.6713656.1679693029!/fileImage/httpImage/image.jpg_gen/derivatives/16x9_780/this-is-fine.jpg',
-    title: 'Sessions',
-    date: 'Nov. 27'
-  },
-  {
-    id: 2,
-    image:
-      'https://i.cbc.ca/1.6713656.1679693029!/fileImage/httpImage/image.jpg_gen/derivatives/16x9_780/this-is-fine.jpg',
-    title: 'Sessions',
-    date: 'Nov. 27'
-  }
-])
+    // Filter for Movies events
+    moviesEvents.value = allEvents
+      .filter((event) => event.categories.some((cat) => cat.name === 'Movies'))
+      .map((event) => ({
+        image: event.bannerImageUrl,
+        title: event.title,
+        description: event.description
+      }))
 
-const tickets = ref([
-  {
-    image:
-      'https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExbWExeGpnaGI5anN0OGtlZWM4aGs5NzJ0M25xcGo4YzhhcXgwMDVkYyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/aQwvKKi4Lv3t63nZl9/giphy.webp',
-    title: 'Event Promo'
-  },
-  {
-    image:
-      'https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExbWExeGpnaGI5anN0OGtlZWM4aGs5NzJ0M25xcGo4YzhhcXgwMDVkYyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/aQwvKKi4Lv3t63nZl9/giphy.webp',
-    title: 'Event Promo'
-  },
-  {
-    image:
-      'https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExbWExeGpnaGI5anN0OGtlZWM4aGs5NzJ0M25xcGo4YzhhcXgwMDVkYyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/aQwvKKi4Lv3t63nZl9/giphy.webp',
-    title: 'Event Promo'
-  },
-  {
-    image:
-      'https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExbWExeGpnaGI5anN0OGtlZWM4aGs5NzJ0M25xcGo4YzhhcXgwMDVkYyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/aQwvKKi4Lv3t63nZl9/giphy.webp',
-    title: 'Event Promo'
-  },
-  {
-    image:
-      'https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExbWExeGpnaGI5anN0OGtlZWM4aGs5NzJ0M25xcGo4YzhhcXgwMDVkYyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/aQwvKKi4Lv3t63nZl9/giphy.webp',
-    title: 'Event Promo'
-  },
-  {
-    image:
-      'https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExbWExeGpnaGI5anN0OGtlZWM4aGs5NzJ0M25xcGo4YzhhcXgwMDVkYyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/aQwvKKi4Lv3t63nZl9/giphy.webp',
-    title: 'Event Promo'
-  },
-  {
-    image:
-      'https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExbWExeGpnaGI5anN0OGtlZWM4aGs5NzJ0M25xcGo4YzhhcXgwMDVkYyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/aQwvKKi4Lv3t63nZl9/giphy.webp',
-    title: 'Event Promo'
-  },
-  {
-    image:
-      'https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExbWExeGpnaGI5anN0OGtlZWM4aGs5NzJ0M25xcGo4YzhhcXgwMDVkYyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/aQwvKKi4Lv3t63nZl9/giphy.webp',
-    title: 'Event Promo'
-  },
-  {
-    image:
-      'https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExbWExeGpnaGI5anN0OGtlZWM4aGs5NzJ0M25xcGo4YzhhcXgwMDVkYyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/aQwvKKi4Lv3t63nZl9/giphy.webp',
-    title: 'Event Promo'
-  },
-  {
-    image:
-      'https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExbWExeGpnaGI5anN0OGtlZWM4aGs5NzJ0M25xcGo4YzhhcXgwMDVkYyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/aQwvKKi4Lv3t63nZl9/giphy.webp',
-    title: 'Event Promo'
-  },
-  {
-    image:
-      'https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExbWExeGpnaGI5anN0OGtlZWM4aGs5NzJ0M25xcGo4YzhhcXgwMDVkYyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/aQwvKKi4Lv3t63nZl9/giphy.webp',
-    title: 'Event Promo'
-  },
-  {
-    image:
-      'https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExbWExeGpnaGI5anN0OGtlZWM4aGs5NzJ0M25xcGo4YzhhcXgwMDVkYyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/aQwvKKi4Lv3t63nZl9/giphy.webp',
-    title: 'Event Promo'
-  },
-  {
-    image:
-      'https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExbWExeGpnaGI5anN0OGtlZWM4aGs5NzJ0M25xcGo4YzhhcXgwMDVkYyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/aQwvKKi4Lv3t63nZl9/giphy.webp',
-    title: 'Event Promo'
-  },
-  {
-    image:
-      'https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExbWExeGpnaGI5anN0OGtlZWM4aGs5NzJ0M25xcGo4YzhhcXgwMDVkYyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/aQwvKKi4Lv3t63nZl9/giphy.webp',
-    title: 'Event Promo'
-  }
-])
+    // Filter for game events
+    gameEvents.value = allEvents
+      .filter((event) => event.categories.some((cat) => cat.name === 'Games'))
+      .map((event) => ({
+        image: event.bannerImageUrl,
+        title: event.title,
+        description: event.description
+      }))
 
-const responsiveOptions = ref([
-  {
-    breakpoint: '10000px',
-    numVisible: 5,
-    numScroll: 1
-  },
-  {
-    breakpoint: '1900px',
-    numVisible: 4,
-    numScroll: 1
-  },
-  {
-    breakpoint: '1200px',
-    numVisible: 3,
-    numScroll: 1
-  },
-  {
-    breakpoint: '767px',
-    numVisible: 2,
-    numScroll: 1
-  },
-  {
-    breakpoint: '575px',
-    numVisible: 1,
-    numScroll: 1
+    // Fetch movie events
+    const movieEventsResponse = await SearchEvents(1, 5, ['34938f39-4d30-3c5a-52f6-55b351d69589'])
+    movieBanners.value = movieEventsResponse.data.value.data.map((event) => ({
+      image: event.bannerImageUrl,
+      title: event.title,
+      description: event.description
+    }))
+  } catch (error) {
+    console.error('Failed to fetch events:', error)
   }
-])
+})
 </script>
 
 <style scoped>

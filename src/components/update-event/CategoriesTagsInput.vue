@@ -67,7 +67,7 @@ import { usePagination } from '@/composables/usePagination'
 import { query } from '@/lib/axios'
 import { cn } from '@/lib/utils'
 import { CreateCategory, GetCategories } from '@/services/categories'
-import type { BaseCategory } from '@/types/items'
+import type { EventCategory } from '@/types/items'
 import { useQuery } from '@tanstack/vue-query'
 import { useDebounceFn } from '@vueuse/core'
 import { Check, X } from 'lucide-vue-next'
@@ -77,10 +77,10 @@ import Input from '../ui/input/Input.vue'
 
 const props = defineProps<{
   categoryIds: string[]
-  categories?: BaseCategory[]
+  categories?: EventCategory[]
 }>()
 const emit = defineEmits(['update:categoryIds'])
-const categories = ref<BaseCategory[]>(props.categories ?? [])
+const categories = ref<EventCategory[]>(props.categories ?? [])
 
 const categoryIds = ref<string[]>(props.categories?.map((x) => x.id) ?? props.categoryIds)
 watchEffect(() => emit('update:categoryIds', categoryIds.value))
@@ -96,7 +96,7 @@ const { categoriesRes, fetchCategoriesSuccess, refetchCategories, createCategory
 
 const searchFn = useDebounceFn(refetchCategories, 400)
 
-function select(value: BaseCategory) {
+function select(value: EventCategory) {
   const index = categories.value.findIndex((x) => x.id === value.id)
   if (index !== -1) {
     categories.value.splice(index, 1)

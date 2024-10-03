@@ -1,4 +1,4 @@
-import type { BaseCategory, BaseEvent } from '@/types/items'
+import type { BaseEvent, EventCategory } from '@/types/items'
 import type { PaginationResponse, Response } from '@/types/results'
 import axiosClient from './axios'
 
@@ -41,7 +41,7 @@ export function SearchEvents(
 }
 
 export type GetEventByIdResponse = BaseEvent & {
-  categories: BaseCategory[]
+  categories: EventCategory[]
   organizerImageUrl: string
   organizerDescription: string
 }

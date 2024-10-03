@@ -1,6 +1,6 @@
 <template>
   <div class="card flex h-96 w-screen flex-col items-center justify-start">
-    <h1 class="h-1/6 w-screen text-center text-3xl font-bold">Music Event</h1>
+    <h1 class="h-1/6 w-screen text-center text-3xl font-bold">Movies Event</h1>
     <Carousel
       circular
       :value="products"
@@ -42,8 +42,8 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
 import Carousel from 'primevue/carousel'
+import { onMounted, ref } from 'vue'
 
 onMounted(() => {
   products.value = [

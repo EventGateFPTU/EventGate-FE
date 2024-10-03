@@ -1,5 +1,4 @@
-import type { BaseCategory } from '@/types/items'
-import type { PaginationResponse, Response } from '@/types/results'
+import type { Response } from '@/types/results'
 import axiosClient from './axios'
 
 type CreateOrderRequest = {

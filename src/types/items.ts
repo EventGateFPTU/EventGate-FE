@@ -1,8 +1,14 @@
 import type { EventStatus } from './enums'
 
-export interface BaseCategory {
+export interface EventCategory {
   id: string
   name: string
+}
+
+export interface Event {
+  image: string
+  title: string
+  description: string
 }
 
 export interface BaseEvent {
@@ -10,10 +16,32 @@ export interface BaseEvent {
   title: string
   description: string
   location: string
+  categories: EventCategory[] 
+  status: EventStatus
   organizerName: string
+  organizerImageUrl: string
+  organizerDescription: string
   backgroundImageUrl: string
   bannerImageUrl: string
-  status: EventStatus
+  additionalImages: string[] 
+  fromPrice: number
+  createdAt: string 
+}
+
+// Response structure
+export interface GetAllEventsResponse {
+  value: {
+    data: Event[]
+    pageNumber: number
+    pageSize: number
+    count: number
+  }
+  status: number
+  isSuccess: boolean
+  successMessage: string
+  correlationId?: string
+  errors: string[]
+  validationErrors: string[]
 }
 
 export interface BaseShow {
