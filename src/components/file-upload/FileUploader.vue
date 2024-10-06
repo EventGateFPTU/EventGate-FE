@@ -34,6 +34,7 @@
 </template>
 
 <script setup lang="ts">
+import { ok } from 'assert';
 import Button from 'primevue/button'
 import Toast from 'primevue/toast'
 import { useToast } from 'primevue/usetoast'
@@ -84,7 +85,16 @@ function onFileChanged(event: Event) {
   })
 }
 
-const allowFileTypes = ['image/png', 'image/jpg']
+const allowFileTypes = [
+  'image/png', 
+  'image/jpg', 
+  'image/jpeg', 
+  'image/gif',
+  'image/bmp',
+  'image/webp',
+  'image/tiff' 
+];
+
 
 async function check(file: File) {
   if (!allowFileTypes.some((x) => file.type == x))
@@ -96,8 +106,9 @@ async function check(file: File) {
   const { height, width } = await getWidthAndHeight(file)
 
   return {
-    ok: height === props.height && width === props.width,
-    message: 'wrong image size'
+    // ok: height === props.height && width === props.width,
+    ok: true,
+    // message: 'wrong image size'
   }
 }
 

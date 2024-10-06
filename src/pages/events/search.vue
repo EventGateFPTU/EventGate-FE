@@ -127,7 +127,7 @@ export default {
   methods: {
     async fetchEvents() {
       try {
-        const response = await axios.get(`https://api-wowtogo.kaitoz11.me/events?pageNumber=${this.currentPage}&pageSize=${this.pageSize}`);
+        const response = await axios.get(`https://api.ticketo.store/events?pageNumber=${this.currentPage}&pageSize=${this.pageSize}`);
         this.events = response.data.value.data;
         this.filteredEvents = this.events;
         this.totalRecords = response.data.value.count;
@@ -137,7 +137,7 @@ export default {
     },
     async fetchCategories() {
       try {
-        const response = await axios.get('https://api-wowtogo.kaitoz11.me/categories?pageNumber=1&pageSize=1000');
+        const response = await axios.get('https://api.ticketo.store/categories?pageNumber=1&pageSize=1000');
         this.categories = response.data.value.data;
       } catch (error) {
         console.error('Error fetching categories:', error);

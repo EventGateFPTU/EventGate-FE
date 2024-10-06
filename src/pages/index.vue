@@ -1,3 +1,4 @@
+
 <template>
   <DefaultLayout :has-footer="true" :has-user-indicator="true">
     <div class="event-promo">
@@ -5,7 +6,7 @@
       <div class="movie-banner-carousel">
         <Carousel :value="movieBanners" :numVisible="1" :numScroll="1" :autoplayInterval="3000">
           <template #item="slotProps">
-            <div class="banner-frame group relative overflow-hidden rounded-lg">
+            <router-link :to="`/events/${slotProps.data.id}`" class="banner-frame group relative overflow-hidden rounded-lg">
               <img
                 :src="slotProps.data.image"
                 alt="Movie Banner"
@@ -17,17 +18,56 @@
                 <h2 class="mb-2 text-4xl font-bold text-white">{{ slotProps.data.title }}</h2>
                 <p class="text-xl text-white">{{ slotProps.data.description }}</p>
               </div>
-            </div>
+            </router-link>
           </template>
         </Carousel>
       </div>
+
+      <div class="ticket-carousel">
+          <Carousel
+            :value="movieBanners"
+            :numVisible="5"
+            :numScroll="1"
+            :responsiveOptions="responsiveOptions"
+          >
+            <template #item="slotProps">
+              <div class="ticket-frame group">
+                <img :src="slotProps.data.image" alt="Event" class="ticket-image carousel-image" />
+                <div
+                  class="ticket-content absolute bottom-0 left-0 right-0 hidden bg-gradient-to-t from-black to-transparent p-6 group-hover:block"
+                >
+                  <h2>{{ slotProps.data.title }}</h2>
+                </div>
+              </div>
+            </template>
+          </Carousel>
+        </div>
+
+      <div class="mini-banner-carousel">
+              <Carousel :value="ticketEvents" :numVisible="7" :numScroll="3">
+                <template #item="slotProps">
+                  <div class="mini-banner-frame group relative">
+                    <img
+                      :src="slotProps.data.image"
+                      alt="Ticket Event"
+                      class="ticket-image carousel-image"
+                    />
+                    <div
+                      class="mini-banner-content absolute bottom-0 left-0 right-0 hidden bg-gradient-to-t from-black to-transparent p-6 group-hover:block"
+                    >
+                      <h2 class="text-lg font-semibold text-white">{{ slotProps.data.title }}</h2>
+                    </div>
+                  </div>
+                </template>
+              </Carousel>
+            </div>
 
       <!-- Trending Events -->
       <div class="trending-events">
         <h1 class="krona-one-regular text-4xl font-bold">TRENDING EVENTS</h1>
         <Carousel :value="trendingEvents" :numVisible="2" :numScroll="1" :autoplayInterval="5000">
           <template #item="slotProps">
-            <div class="banner-category-frame group relative">
+            <router-link :to="`/events/${slotProps.data.id}`" class="banner-category-frame group relative">
               <img
                 :src="slotProps.data.image"
                 alt="Event Banner"
@@ -39,7 +79,7 @@
                 <h2 class="mb-2 text-4xl font-bold text-white">{{ slotProps.data.title }}</h2>
                 <p class="text-xl text-white">{{ slotProps.data.description }}</p>
               </div>
-            </div>
+            </router-link>
           </template>
         </Carousel>
       </div>
@@ -49,7 +89,7 @@
         <h1 class="krona-one-regular text-4xl font-bold" style="margin-top: 20px">MOVIES EVENTS</h1>
         <Carousel :value="moviesEvents" :numVisible="2" :numScroll="1" :autoplayInterval="5000">
           <template #item="slotProps">
-            <div class="banner-category-frame group relative">
+            <router-link :to="`/events/${slotProps.data.id}`" class="banner-category-frame group relative">
               <img
                 :src="slotProps.data.image"
                 alt="Movies Event"
@@ -61,7 +101,7 @@
                 <h2 class="mb-2 text-4xl font-bold text-white">{{ slotProps.data.title }}</h2>
                 <p class="text-xl text-white">{{ slotProps.data.description }}</p>
               </div>
-            </div>
+            </router-link>
           </template>
         </Carousel>
       </div>
@@ -71,7 +111,7 @@
         <h1 class="krona-one-regular text-4xl font-bold" style="margin-top: 20px">GAME EVENTS</h1>
         <Carousel :value="gameEvents" :numVisible="2" :numScroll="1" :autoplayInterval="5000">
           <template #item="slotProps">
-            <div class="banner-category-frame group relative">
+            <router-link :to="`/events/${slotProps.data.id}`" class="banner-category-frame group relative">
               <img
                 :src="slotProps.data.image"
                 alt="Game Event"
@@ -83,7 +123,7 @@
                 <h2 class="mb-2 text-4xl font-bold text-white">{{ slotProps.data.title }}</h2>
                 <p class="text-xl text-white">{{ slotProps.data.description }}</p>
               </div>
-            </div>
+            </router-link>
           </template>
         </Carousel>
       </div>
@@ -97,18 +137,22 @@ import { GetEvents, GetFeaturedEvents, SearchEvents } from '@/services/events'
 import type { Event } from '@/types/items'
 import Carousel from 'primevue/carousel'
 import { onMounted, ref } from 'vue'
+import { useRouter } from 'vue-router'
 
+const router = useRouter()
 // Define the reactive properties with the explicit type
 const movieBanners = ref<Event[]>([])
 const trendingEvents = ref<Event[]>([])
 const moviesEvents = ref<Event[]>([])
 const gameEvents = ref<Event[]>([])
+const ticketEvents= ref<Event[]>([])
 
-onMounted(async () => {
+onMounted(async() => {
   try {
     // Fetch featured events for trending
     const featuredResponse = await GetFeaturedEvents(1, 5)
     trendingEvents.value = featuredResponse.data.value.data.map((event) => ({
+      id: event.id, // Đảm bảo có id của sự kiện
       image: event.bannerImageUrl,
       title: event.title,
       description: event.description
@@ -122,6 +166,7 @@ onMounted(async () => {
     moviesEvents.value = allEvents
       .filter((event) => event.categories.some((cat) => cat.name === 'Movies'))
       .map((event) => ({
+        id: event.id, 
         image: event.bannerImageUrl,
         title: event.title,
         description: event.description
@@ -131,6 +176,7 @@ onMounted(async () => {
     gameEvents.value = allEvents
       .filter((event) => event.categories.some((cat) => cat.name === 'Games'))
       .map((event) => ({
+        id: event.id, 
         image: event.bannerImageUrl,
         title: event.title,
         description: event.description
@@ -139,6 +185,7 @@ onMounted(async () => {
     // Fetch movie events
     const movieEventsResponse = await SearchEvents(1, 5, ['34938f39-4d30-3c5a-52f6-55b351d69589'])
     movieBanners.value = movieEventsResponse.data.value.data.map((event) => ({
+      id: event.id, 
       image: event.bannerImageUrl,
       title: event.title,
       description: event.description
@@ -147,7 +194,36 @@ onMounted(async () => {
     console.error('Failed to fetch events:', error)
   }
 })
+
+const responsiveOptions = ref([
+    {
+      breakpoint: '10000px',
+      numVisible: 5,
+      numScroll: 1
+    },
+    {
+      breakpoint: '1900px',
+      numVisible: 4,
+      numScroll: 1
+    },
+    {
+      breakpoint: '1200px',
+      numVisible: 3,
+      numScroll: 1
+    },
+    {
+      breakpoint: '767px',
+      numVisible: 2,
+      numScroll: 1
+    },
+    {
+      breakpoint: '575px',
+      numVisible: 1,
+      numScroll: 1
+    }
+  ])
 </script>
+
 
 <style scoped>
 .krona-one-regular {
@@ -292,3 +368,7 @@ onMounted(async () => {
   background: linear-gradient(to bottom, #d6f6ff, #0088ff);
 }
 </style>
+
+
+
+
