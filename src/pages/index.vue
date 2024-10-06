@@ -43,24 +43,18 @@
           </Carousel>
         </div>
 
-      <div class="mini-banner-carousel">
-              <Carousel :value="ticketEvents" :numVisible="7" :numScroll="3">
-                <template #item="slotProps">
-                  <div class="mini-banner-frame group relative">
-                    <img
-                      :src="slotProps.data.image"
-                      alt="Ticket Event"
-                      class="ticket-image carousel-image"
-                    />
-                    <div
-                      class="mini-banner-content absolute bottom-0 left-0 right-0 hidden bg-gradient-to-t from-black to-transparent p-6 group-hover:block"
-                    >
-                      <h2 class="text-lg font-semibold text-white">{{ slotProps.data.title }}</h2>
-                    </div>
-                  </div>
-                </template>
-              </Carousel>
-            </div>
+        <!-- Decorative Section -->
+        <div class="decorative-section">
+          <div
+            class="wave scale-x-[1 absolute bottom-0 left-0 h-[500px] w-full transform rounded-t-full bg-[#D6F6FF]"
+          ></div>
+          <div class="bottom-20 z-10 flex items-center justify-center">
+            <img src="@/assets/home.png" alt="Ticket Image" class="h-[400px]" />
+          </div>
+        </div>
+  
+        <div class="gradient-background">
+          <div>
 
       <!-- Trending Events -->
       <div class="trending-events">
@@ -84,6 +78,26 @@
         </Carousel>
       </div>
 
+      <div class="mini-banner-carousel">
+              <Carousel :value="trendingEvents" :numVisible="7" :numScroll="3">
+                <template #item="slotProps">
+                  <div class="mini-banner-frame group relative">
+                    <img
+                      :src="slotProps.data.image"
+                      alt="Event"
+                      class="ticket-image carousel-image"
+                    />
+                    <div
+                      class="mini-banner-content absolute bottom-0 left-0 right-0 hidden bg-gradient-to-t from-black to-transparent p-6 group-hover:block"
+                    >
+                      <h2 class="text-lg font-semibold text-white">{{ slotProps.data.title }}</h2>
+                    </div>
+                  </div>
+                </template>
+              </Carousel>
+            </div>
+          </div>
+
       <!-- Movies Events -->
       <div class="movies-events">
         <h1 class="krona-one-regular text-4xl font-bold" style="margin-top: 20px">MOVIES EVENTS</h1>
@@ -106,6 +120,25 @@
         </Carousel>
       </div>
 
+      <div class="mini-banner-carousel">
+              <Carousel :value="moviesEvents" :numVisible="7" :numScroll="3">
+                <template #item="slotProps">
+                  <div class="mini-banner-frame group relative">
+                    <img
+                      :src="slotProps.data.image"
+                      alt="Event"
+                      class="ticket-image carousel-image"
+                    />
+                    <div
+                      class="mini-banner-content absolute bottom-0 left-0 right-0 hidden bg-gradient-to-t from-black to-transparent p-6 group-hover:block"
+                    >
+                      <h2 class="text-lg font-semibold text-white">{{ slotProps.data.title }}</h2>
+                    </div>
+                  </div>
+                </template>
+              </Carousel>
+            </div>
+
       <!-- Game Events -->
       <div class="game-events">
         <h1 class="krona-one-regular text-4xl font-bold" style="margin-top: 20px">GAME EVENTS</h1>
@@ -127,6 +160,27 @@
           </template>
         </Carousel>
       </div>
+
+      <div class="mini-banner-carousel">
+              <Carousel :value="gameEvents" :numVisible="7" :numScroll="3">
+                <template #item="slotProps">
+                  <div class="mini-banner-frame group relative">
+                    <img
+                      :src="slotProps.data.image"
+                      alt="Event"
+                      class="ticket-image carousel-image"
+                    />
+                    <div
+                      class="mini-banner-content absolute bottom-0 left-0 right-0 hidden bg-gradient-to-t from-black to-transparent p-6 group-hover:block"
+                    >
+                      <h2 class="text-lg font-semibold text-white">{{ slotProps.data.title }}</h2>
+                    </div>
+                  </div>
+                </template>
+              </Carousel>
+            </div>
+          
+    </div>
     </div>
   </DefaultLayout>
 </template>
