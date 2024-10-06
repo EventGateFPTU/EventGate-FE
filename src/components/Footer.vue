@@ -1,5 +1,5 @@
 <template>
-  <div class="m-0 grid h-96 w-screen grid-cols-3 bg-[#FFFBE2]">
+  <div class="m-0 grid h-96 w-screen grid-cols-3 bg-[#fdf6e3]">
     <div></div>
     <div class="flex items-center justify-center">
       <img src="@/assets/qr.png" alt="" class="w-60" />

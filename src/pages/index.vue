@@ -31,26 +31,21 @@
             :responsiveOptions="responsiveOptions"
           >
             <template #item="slotProps">
-              <div class="ticket-frame group">
+              <router-link :to="`/events/${slotProps.data.id}`" class="ticket-frame group">
                 <img :src="slotProps.data.image" alt="Event" class="ticket-image carousel-image" />
                 <div
                   class="ticket-content absolute bottom-0 left-0 right-0 hidden bg-gradient-to-t from-black to-transparent p-6 group-hover:block"
                 >
                   <h2>{{ slotProps.data.title }}</h2>
                 </div>
-              </div>
+              </router-link>
             </template>
           </Carousel>
         </div>
 
         <!-- Decorative Section -->
         <div class="decorative-section">
-          <div
-            class="wave scale-x-[1 absolute bottom-0 left-0 h-[500px] w-full transform rounded-t-full bg-[#D6F6FF]"
-          ></div>
-          <div class="bottom-20 z-10 flex items-center justify-center">
-            <img src="@/assets/home.png" alt="Ticket Image" class="h-[400px]" />
-          </div>
+            <img src="@/assets/page-logo.png" alt="Ticket Image" class="decorative-image" />
         </div>
   
         <div class="gradient-background">
@@ -81,7 +76,7 @@
       <div class="mini-banner-carousel">
               <Carousel :value="trendingEvents" :numVisible="7" :numScroll="3">
                 <template #item="slotProps">
-                  <div class="mini-banner-frame group relative">
+                  <router-link :to="`/events/${slotProps.data.id}`"class="mini-banner-frame group relative">
                     <img
                       :src="slotProps.data.image"
                       alt="Event"
@@ -92,7 +87,7 @@
                     >
                       <h2 class="text-lg font-semibold text-white">{{ slotProps.data.title }}</h2>
                     </div>
-                  </div>
+                  </router-link>
                 </template>
               </Carousel>
             </div>
@@ -123,7 +118,7 @@
       <div class="mini-banner-carousel">
               <Carousel :value="moviesEvents" :numVisible="7" :numScroll="3">
                 <template #item="slotProps">
-                  <div class="mini-banner-frame group relative">
+                  <router-link :to="`/events/${slotProps.data.id}`" class="mini-banner-frame group relative">
                     <img
                       :src="slotProps.data.image"
                       alt="Event"
@@ -134,7 +129,7 @@
                     >
                       <h2 class="text-lg font-semibold text-white">{{ slotProps.data.title }}</h2>
                     </div>
-                  </div>
+                  </router-link>
                 </template>
               </Carousel>
             </div>
@@ -164,7 +159,7 @@
       <div class="mini-banner-carousel">
               <Carousel :value="gameEvents" :numVisible="7" :numScroll="3">
                 <template #item="slotProps">
-                  <div class="mini-banner-frame group relative">
+                  <router-link :to="`/events/${slotProps.data.id}`" class="mini-banner-frame group relative">
                     <img
                       :src="slotProps.data.image"
                       alt="Event"
@@ -175,7 +170,7 @@
                     >
                       <h2 class="text-lg font-semibold text-white">{{ slotProps.data.title }}</h2>
                     </div>
-                  </div>
+                  </router-link>
                 </template>
               </Carousel>
             </div>
@@ -372,12 +367,18 @@ const responsiveOptions = ref([
 .decorative-section {
   position: relative;
   background-color: #fdf6e3;
-  padding: 200px;
+  width: 100%;
 }
 
 .decorative-section .z-10 {
   position: relative;
   z-index: 10;
+}
+
+.decorative-image {
+  width: 100%; 
+  height: auto;
+  display: block;
 }
 
 .flex {
