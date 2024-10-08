@@ -18,7 +18,7 @@
                 class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent p-6 group-hover:block"
               >
                 <h2 class="mb-2 text-4xl font-bold text-white">{{ slotProps.data.title }}</h2>
-                <p class="text-xl text-white">{{ slotProps.data.description }}</p>
+                <p v-html="slotProps.data.description" class="text-xl text-white"></p>
               </div>
             </router-link>
           </template>
@@ -75,7 +75,7 @@
                     class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent p-6 group-hover:block"
                   >
                     <h2 class="mb-2 text-4xl font-bold text-white">{{ slotProps.data.title }}</h2>
-                    <p class="text-xl text-white">{{ slotProps.data.description }}</p>
+                    <p v-html="slotProps.data.description" class="text-xl text-white"></p>
                   </div>
                 </router-link>
               </template>
@@ -125,7 +125,7 @@
                   class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent p-6 group-hover:block"
                 >
                   <h2 class="mb-2 text-4xl font-bold text-white">{{ slotProps.data.title }}</h2>
-                  <p class="text-xl text-white">{{ slotProps.data.description }}</p>
+                  <p v-html="slotProps.data.description" class="text-xl text-white"></p>
                 </div>
               </router-link>
             </template>
@@ -168,7 +168,7 @@
                   class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent p-6 group-hover:block"
                 >
                   <h2 class="mb-2 text-4xl font-bold text-white">{{ slotProps.data.title }}</h2>
-                  <p class="text-xl text-white">{{ slotProps.data.description }}</p>
+                  <p v-html="slotProps.data.description" class="text-xl text-white"></p>
                 </div>
               </router-link>
             </template>
