@@ -96,7 +96,7 @@
 <script setup lang="ts">
 import Button from 'primevue/button'
 import Dialog from 'primevue/dialog'
-import { computed, ref } from 'vue'
+import { computed, ref, watch } from 'vue'
 import InputText from 'primevue/inputtext'
 import { toTypedSchema } from '@vee-validate/zod'
 import * as z from 'zod'
@@ -145,6 +145,12 @@ const [fromDate] = defineField('fromDate')
 const [toDate] = defineField('toDate')
 const [price] = defineField('price')
 const checked = ref(false)
+watch(price, (val) => {
+  if (val == 0) checked.value = true
+})
+watch(checked, (val) => {
+  if (val) price.value = 0
+})
 const [amount] = defineField('amount')
 const [leastAmountBuy] = defineField('leastAmountBuy')
 const [mostAmountBuy] = defineField('mostAmountBuy')

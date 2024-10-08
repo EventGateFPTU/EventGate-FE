@@ -11,10 +11,10 @@ export enum ResultStatus {
 }
 
 export enum EventStatus {
-  Canceled = 0,
-  Draft = 1,
-  Published = 2,
-  Completed = 3
+  Canceled = 'Canceled',
+  Draft = 'Draft',
+  Published = 'Published',
+  Completed = 'Completed'
 }
 
 export function eventStatusToNumber(status: EventStatus) {

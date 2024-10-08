@@ -9,7 +9,7 @@
       <TicketsStep v-if="event" :event :nextStep />
     </template>
     <template #Settings>
-      <SettingsStep v-if="event" :eventId="event.id" />
+      <SettingsStep v-if="event" :event />
     </template>
   </Stepper>
 </template>

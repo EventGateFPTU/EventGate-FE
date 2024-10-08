@@ -115,3 +115,7 @@ export function GetStaffEvents(pageNumber: number, pageSize: number) {
     params: { pageNumber, pageSize }
   })
 }
+
+export function PublishEvent(eventId: string) {
+  return axiosClient.put(`/events/publish/${eventId}`)
+}
