@@ -67,7 +67,7 @@ onMounted(() => {
         <img
           src="@/assets/ellipse.png"
           alt=""
-          class="absolute -z-40 w-full drop-shadow-2xl"
+          class="absolute -z-40 hidden w-full drop-shadow-2xl"
           :style="{
             transform: `translateY(-${height * 2.2}px)`
           }"
