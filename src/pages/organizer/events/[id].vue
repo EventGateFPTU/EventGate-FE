@@ -23,7 +23,7 @@
           <div class="container min-h-[50%] rounded-xl bg-white">
             <TabsContent value="orders">
               <div class="my-20 p-4">
-                <OrdersTable />
+                <OrdersTable :eventId />
               </div>
             </TabsContent>
             <TabsContent value="checkins">

@@ -2,6 +2,23 @@ import type { BaseEvent, EventCategory } from '@/types/items'
 import type { PaginationResponse, Response } from '@/types/results'
 import axiosClient from './axios'
 
+type Order = {
+  id: string
+  totalPrice: number
+  status: string
+  currency: string
+  createdAt: string
+  email: string
+}
+export function GetEventOrders(eventId: string, pageNumber: number, pageSize: number) {
+  return axiosClient.get<Response<PaginationResponse<Order>>>(`/events/${eventId}/orders`, {
+    params: {
+      pageNumber,
+      pageSize
+    }
+  })
+}
+
 export function GetEvents(pageNumber: number, pageSize: number, searchTerm?: string) {
   return axiosClient.get<Response<PaginationResponse<BaseEvent>>>('/events', {
     params: {

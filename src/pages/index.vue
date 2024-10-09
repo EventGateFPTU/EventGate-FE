@@ -221,7 +221,7 @@ onMounted(async () => {
       id: event.id, // Đảm bảo có id của sự kiện
       image: event.backgroundImageUrl,
       title: event.title,
-      description: event.description
+      description: event.description.slice(0, event.description.indexOf('</p>') + 3)
     }))
 
     // Fetch all events and filter by category
@@ -235,7 +235,7 @@ onMounted(async () => {
         id: event.id,
         image: event.backgroundImageUrl,
         title: event.title,
-        description: event.description
+        description: event.description.slice(0, event.description.indexOf('</p>') + 3)
       }))
 
     // Filter for game events
@@ -245,7 +245,7 @@ onMounted(async () => {
         id: event.id,
         image: event.backgroundImageUrl,
         title: event.title,
-        description: event.description
+        description: event.description.slice(0, event.description.indexOf('</p>') + 3)
       }))
 
     // Fetch movie events
@@ -254,7 +254,7 @@ onMounted(async () => {
       id: event.id,
       image: event.backgroundImageUrl,
       title: event.title,
-      description: event.description
+      description: event.description.slice(0, event.description.indexOf('</p>') + 3)
     }))
   } catch (error) {
     console.error('Failed to fetch events:', error)
