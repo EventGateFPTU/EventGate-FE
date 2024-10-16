@@ -90,7 +90,7 @@ onMounted(() => {
             </swiper>
           </div>
           <div class="relative flex flex-row-reverse justify-between gap-16">
-            <div class="relative w-full space-y-8">
+            <div class="relative w-[50%] space-y-8">
               <h2 class="text-2xl font-bold">BAN TỔ CHỨC</h2>
               <div class="flex flex-col items-center gap-4">
                 <img :src="event.organizerImageUrl" alt="" class="w-full rounded-3xl" />
@@ -108,7 +108,7 @@ onMounted(() => {
           </div>
         </div>
       </div>
-      <div class="space-y-16 px-32 pb-[400px] pt-[5%]">
+      <div class="space-y-16 px-32 pb-[400px]">
         <h2 class="text-2xl font-bold">HẠNG VÉ</h2>
 
         <div class="grid grid-cols-6 gap-12">
